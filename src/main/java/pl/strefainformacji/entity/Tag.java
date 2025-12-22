@@ -12,6 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "articles")
-public class Article {
+@Table(name = "tags")
+public class Tag {
 }
