@@ -1,7 +1,7 @@
 package pl.strefainformacji.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -14,4 +14,19 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "articles")
 public class Article {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long articleId;
+
+    @Size(min = 3)
+    private String title;
+
+    @Size(min = 10)
+    private String shortDescription;
+
+    @Size(min = 10)
+    //@Lob
+    @Column(columnDefinition = "TEXT")
+    private String description;
 }
