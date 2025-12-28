@@ -2,6 +2,7 @@ package pl.strefainformacji.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -12,18 +13,22 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "categories")
-public class Category {
+@Table(name = "images")
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @EqualsAndHashCode.Include
+    private Long imageId;
 
-    @Column(nullable = false, unique = true)
-    private String categoryName;
+    @NotBlank
+    private String srcImg;
+
+    @NotBlank
+    private String altImg;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "articleId",  nullable = false)
+    @JoinColumn(name = "articleId", nullable = false)
     @JsonIgnore
     private Article article;
 }

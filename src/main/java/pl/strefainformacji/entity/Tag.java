@@ -1,5 +1,6 @@
 package pl.strefainformacji.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,4 +22,9 @@ public class Tag {
 
     @Column(nullable = false, unique = true)
     private String tagName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "articleId", nullable = false)
+    @JsonIgnore
+    private Article article;
 }

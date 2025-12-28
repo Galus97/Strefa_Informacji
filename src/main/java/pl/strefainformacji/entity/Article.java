@@ -26,7 +26,6 @@ public class Article {
     private String shortDescription;
 
     @Size(min = 10)
-    //@Lob
     @Column(columnDefinition = "TEXT")
     private String description;
 }
