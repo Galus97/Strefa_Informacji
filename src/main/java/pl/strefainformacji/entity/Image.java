@@ -1,5 +1,6 @@
 package pl.strefainformacji.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -26,4 +27,8 @@ public class Image {
     @NotBlank
     private String altImg;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "articleId", nullable = false)
+    @JsonIgnore
+    private Article article;
 }
