@@ -1,5 +1,6 @@
 package pl.strefainformacji.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,8 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String categoryName;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "articleId",  nullable = false)
+    @JsonIgnore
+    private Article article;
 }
