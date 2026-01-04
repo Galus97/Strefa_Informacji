@@ -9,4 +9,9 @@ import pl.strefainformacji.repository.ArticleRepository;
 public class ArticleService {
     private final ArticleRepository articleRepository;
 
+    public void throwIfIdIsInvalid (Long id, String message) {
+        if(id == null || id < 0) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }
