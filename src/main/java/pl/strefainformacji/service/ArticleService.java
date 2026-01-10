@@ -21,7 +21,9 @@ public class ArticleService {
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
-
+    public ArticleResponse saveArticle(ArticleRequest articleRequest) {
+        return ArticleResponse.fromEntity(buildArticle(articleRequest));
+    }
 
     private Article buildArticle(ArticleRequest articleRequest) {
         throwIfRequestIsNull(articleRequest);
