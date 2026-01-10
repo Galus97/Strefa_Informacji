@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
@@ -20,6 +21,8 @@ public class ArticleService {
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
+
+
     private void throwIfIdIsInvalid (Long id, String message) {
         if(id == null || id < 0) {
             throw new IllegalArgumentException(message);
@@ -29,5 +32,11 @@ public class ArticleService {
     private Article getArticleOrThrowIfNotExist (Long id) {
         return articleRepository.findById(id).orElseThrow(
                 () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, id)));
+    }
+
+    private void throwIfRequestIsNull (ArticleRequest articleRequest) {
+        if (articleRequest == null) {
+            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.ARTICLE_REQUEST_IS_NULL));
+        }
     }
 }
