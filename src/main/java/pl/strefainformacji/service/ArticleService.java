@@ -23,6 +23,16 @@ public class ArticleService {
 
 
 
+    private Article buildArticle(ArticleRequest articleRequest) {
+        throwIfRequestIsNull(articleRequest);
+        return  Article.builder()
+                .articleId(articleRequest.getArticleId())
+                .title(articleRequest.getTitle())
+                .shortDescription(articleRequest.getShortDescription())
+                .description(articleRequest.getDescription())
+                .build();
+    }
+
     private void throwIfIdIsInvalid (Long id, String message) {
         if(id == null || id < 0) {
             throw new IllegalArgumentException(message);
