@@ -2,6 +2,7 @@ package pl.strefainformacji.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ArticleRequest;
@@ -28,6 +29,19 @@ public class ArticleService {
     public void deleteArticle(Long articleId) {
         throwIfIdIsInvalid(articleId);
         articleRepository.deleteById(articleId);
+    }
+
+    @Transactional
+    public ArticleResponse updateArticle(ArticleRequest articleRequest) {
+        throwIfRequestIsNull(articleRequest);
+        throwIfIdIsInvalid(articleRequest.getArticleId());
+
+        Article article = getArticleOrThrowIfNotExist(articleRequest.getArticleId());
+        article.setTitle(articleRequest.getTitle());
+        article.setDescription(articleRequest.getDescription());
+        article.setShortDescription(articleRequest.getShortDescription());
+
+        return ArticleResponse.fromEntity(articleRepository.save(article));
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
