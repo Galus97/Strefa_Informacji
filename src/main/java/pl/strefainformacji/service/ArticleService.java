@@ -17,12 +17,17 @@ public class ArticleService {
     private final MessageService messageService;
 
     public ArticleResponse getArticleResponse(Long articleId) {
-        throwIfIdIsInvalid(articleId, ErrorMessages.INVALID_ARTICLE_ID);
+        throwIfIdIsInvalid(articleId);
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
         return ArticleResponse.fromEntity(buildArticle(articleRequest));
+    }
+
+    public void deleteArticle(Long articleId) {
+        throwIfIdIsInvalid(articleId);
+        articleRepository.deleteById(articleId);
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
@@ -35,9 +40,9 @@ public class ArticleService {
                 .build();
     }
 
-    private void throwIfIdIsInvalid (Long id, String message) {
+    private void throwIfIdIsInvalid (Long id) {
         if(id == null || id < 0) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_ARTICLE_ID);
         }
     }
 
