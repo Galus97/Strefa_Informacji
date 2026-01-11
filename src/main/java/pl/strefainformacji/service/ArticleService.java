@@ -2,6 +2,7 @@ package pl.strefainformacji.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ArticleRequest;
@@ -17,12 +18,30 @@ public class ArticleService {
     private final MessageService messageService;
 
     public ArticleResponse getArticleResponse(Long articleId) {
-        throwIfIdIsInvalid(articleId, ErrorMessages.INVALID_ARTICLE_ID);
+        throwIfIdIsInvalid(articleId);
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
         return ArticleResponse.fromEntity(buildArticle(articleRequest));
+    }
+
+    public void deleteArticle(Long articleId) {
+        throwIfIdIsInvalid(articleId);
+        articleRepository.deleteById(articleId);
+    }
+
+    @Transactional
+    public ArticleResponse updateArticle(ArticleRequest articleRequest) {
+        throwIfRequestIsNull(articleRequest);
+        throwIfIdIsInvalid(articleRequest.getArticleId());
+
+        Article article = getArticleOrThrowIfNotExist(articleRequest.getArticleId());
+        article.setTitle(articleRequest.getTitle());
+        article.setDescription(articleRequest.getDescription());
+        article.setShortDescription(articleRequest.getShortDescription());
+
+        return ArticleResponse.fromEntity(articleRepository.save(article));
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
@@ -35,9 +54,9 @@ public class ArticleService {
                 .build();
     }
 
-    private void throwIfIdIsInvalid (Long id, String message) {
+    private void throwIfIdIsInvalid (Long id) {
         if(id == null || id < 0) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_ARTICLE_ID);
         }
     }
 
