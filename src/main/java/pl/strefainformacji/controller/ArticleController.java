@@ -1,13 +1,14 @@
 package pl.strefainformacji.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.service.ArticleService;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,4 +20,13 @@ public class ArticleController {
     public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long id) {
         return ResponseEntity.ok(articleService.getArticleResponse(id));
     }
+
+    @PostMapping
+    public ResponseEntity<ArticleResponse> saveArticle(@Valid @RequestBody ArticleRequest articleRequest) {
+        ArticleResponse savedArticle = articleService.saveArticle(articleRequest);
+        return ResponseEntity.created(URI.create("/article/" + savedArticle.articleId()))
+                .body(savedArticle);
+    }
+
+
 }
