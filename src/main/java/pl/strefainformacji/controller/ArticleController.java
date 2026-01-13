@@ -28,5 +28,8 @@ public class ArticleController {
                 .body(savedArticle);
     }
 
-
+    @PutMapping
+    public ResponseEntity<ArticleResponse> updateArticle(@Valid @RequestBody ArticleRequest articleRequest) {
+        return ResponseEntity.ok(articleService.updateArticle(articleRequest));
+    }
 }
