@@ -32,4 +32,10 @@ public class ArticleController {
     public ResponseEntity<ArticleResponse> updateArticle(@Valid @RequestBody ArticleRequest articleRequest) {
         return ResponseEntity.ok(articleService.updateArticle(articleRequest));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ArticleResponse> deleteArticle(@PathVariable Long id) {
+        articleService.deleteArticle(id);
+        return ResponseEntity.noContent().build();
+    }
 }
