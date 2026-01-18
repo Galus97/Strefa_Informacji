@@ -1,14 +1,15 @@
 package pl.strefainformacji.dto.response;
 
-import pl.strefainformacji.entity.Article;
+import pl.strefainformacji.entity.Image;
 
-public record ArticleResponse(Long articleId, String title, String shortDescription, String description) {
+public record ImageResponse(Long imageId, String srcImg, String altImg, ArticleResponse articleResponse) {
 
-    public static ArticleResponse fromEntity(Article article) {
-        return new ArticleResponse(
-                article.getArticleId(),
-                article.getTitle(),
-                article.getShortDescription(),
-                article.getDescription());
+    public static ImageResponse fromEntity(Image image) {
+        return new ImageResponse(
+                image.getImageId(),
+                image.getSrcImg(),
+                image.getAltImg(),
+                ArticleResponse.fromEntity(image.getArticle())
+        );
     }
 }
