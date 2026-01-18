@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Builder
 @Data
-public class ArticleRequest {
-    private Long articleId;
-    private String title;
-    private String shortDescription;
-    private String description;
+public class ImageRequest {
+    private Long imageId;
+    private String srcImg;
+    private String altImg;
+    private ArticleRequest articleRequest;
 }
