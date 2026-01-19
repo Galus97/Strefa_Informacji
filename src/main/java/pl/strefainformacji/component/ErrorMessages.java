@@ -8,4 +8,6 @@ public final class ErrorMessages {
     public static final String EMAIL_IS_INVALID = "error.invalidEmail";
 
     public static final String USER_NOT_FOUND =  "error.userNotFound";
+
+    public static final String INVALID_IMAGE_ID = "error.invalidImageId";
 }
