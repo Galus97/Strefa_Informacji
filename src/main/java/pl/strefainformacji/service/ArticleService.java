@@ -46,7 +46,7 @@ public class ArticleService {
 
     private Article buildArticle(ArticleRequest articleRequest) {
         throwIfRequestIsNull(articleRequest);
-        return  Article.builder()
+        return Article.builder()
                 .articleId(articleRequest.getArticleId())
                 .title(articleRequest.getTitle())
                 .shortDescription(articleRequest.getShortDescription())
@@ -54,18 +54,18 @@ public class ArticleService {
                 .build();
     }
 
-    private void throwIfIdIsInvalid (Long id) {
-        if(id == null || id < 0) {
+    private void throwIfIdIsInvalid(Long id) {
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_ARTICLE_ID);
         }
     }
 
-    private Article getArticleOrThrowIfNotExist (Long id) {
+    private Article getArticleOrThrowIfNotExist(Long id) {
         return articleRepository.findById(id).orElseThrow(
                 () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, id)));
     }
 
-    private void throwIfRequestIsNull (ArticleRequest articleRequest) {
+    private void throwIfRequestIsNull(ArticleRequest articleRequest) {
         if (articleRequest == null) {
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.ARTICLE_REQUEST_IS_NULL));
         }
