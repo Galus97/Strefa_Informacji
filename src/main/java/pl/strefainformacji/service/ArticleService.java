@@ -55,7 +55,7 @@ public class ArticleService {
     }
 
     private void throwIfIdIsInvalid (Long id) {
-        if(id == null || id < 0) {
+        if(id == null || id <= 0) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_ARTICLE_ID);
         }
     }
