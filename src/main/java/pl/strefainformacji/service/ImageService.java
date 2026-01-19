@@ -15,6 +15,10 @@ public class ImageService {
      private final ImageRepository imageRepository;
      private final MessageService messageService;
 
+     public ImageResponse getImageResponse (Long imageId) {
+        throwIfIdIsInvalid(imageId);
+        return ImageResponse.fromEntity(getImageOrThrowIfNotExist(imageId));
+     }
 
      private void throwIfIdIsInvalid(Long imageId) {
       if(imageId == null || imageId <= 0) {
