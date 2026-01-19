@@ -12,7 +12,6 @@ import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.entity.User;
 import pl.strefainformacji.repository.UserRepository;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
