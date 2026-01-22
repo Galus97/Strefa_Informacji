@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.entity.User;
+import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.repository.UserRepository;
 
 @Service
@@ -16,5 +18,10 @@ public class UserService {
         if(id == null || id <= 0) {
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_USER_ID));
         }
+    }
+
+    private User getUserOrThrowIfNotExist(Long id){
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND, id)));
     }
 }
