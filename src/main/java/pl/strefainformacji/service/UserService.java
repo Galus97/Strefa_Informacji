@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
-import pl.strefainformacji.dto.request.UserRequest;
-import pl.strefainformacji.dto.response.UserResponse;
-import pl.strefainformacji.entity.User;
 import pl.strefainformacji.repository.UserRepository;
 
 @Service
