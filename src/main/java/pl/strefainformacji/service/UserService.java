@@ -20,6 +20,11 @@ public class UserService {
         return UserResponse.fromEntity(getUserOrThrowIfNotExist(userId));
     }
 
+    public void deleteUser(Long userId){
+        throwIfIdIsInvalid(userId);
+        userRepository.deleteById(userId);
+    }
+
     private void throwIfIdIsInvalid(Long id) {
         if(id == null || id <= 0) {
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_USER_ID));
