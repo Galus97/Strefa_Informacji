@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 
+import java.util.Random;
+
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,11 @@ public class EmailService {
     @Async
     public void sendEmail(String email) {
         throwIfEmailIsInvalid(email);
+    }
+
+    private String generateActiveCode() {
+        Random random = new Random();
+        return String.valueOf(random.nextInt(10000, 99999));
     }
 
     private void throwIfEmailIsInvalid(String email) {
