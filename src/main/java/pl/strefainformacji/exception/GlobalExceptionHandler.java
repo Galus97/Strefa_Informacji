@@ -17,6 +17,11 @@ public class GlobalExceptionHandler {
         return getMapResponseEntity(e);
     }
 
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleImageNotFoundException(ImageNotFoundException e) {
+        return getMapResponseEntity(e);
+    }
+
     private static ResponseEntity<Map<String, String>> getMapResponseEntity(RuntimeException e) {
         Map<String, String> response = new HashMap<>();
         response.put(ErrorMessages.ERROR, e.getMessage());
