@@ -27,6 +27,11 @@ public class GlobalExceptionHandler {
         return getMapResponseEntity(e);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
     private static ResponseEntity<Map<String, String>> getMapResponseEntity(RuntimeException e) {
         Map<String, String> response = new HashMap<>();
         response.put(ErrorMessages.ERROR, e.getMessage());
