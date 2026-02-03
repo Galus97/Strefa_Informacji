@@ -18,4 +18,5 @@ public final class ErrorMessages {
     public static final String VERIFICATION_CODE = "verificationCodes";
     public static final String EMAIL_TEXT = "email.text";
     public static final String EMAIL_FORM = "email.form";
+    public static final String EMAIL_SUBJECT = "email.subject";
 }
