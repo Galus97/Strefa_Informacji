@@ -2,6 +2,7 @@ package pl.strefainformacji.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,18 @@ public class EmailService {
     @Async
     public void sendEmail(String email) {
         throwIfEmailIsInvalid(email);
+        String emailActiveCode = generateActiveCode();
+        cacheManager.getCache(ErrorMessages.VERIFICATION_CODE).put(email, emailActiveCode);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        String text = messageService.getMessage(ErrorMessages.EMAIL_TEXT, emailActiveCode);
+
+        message.setTo(email);
+        message.setFrom(messageService.getMessage(ErrorMessages.EMAIL_FORM));
+        message.setSubject(messageService.getMessage(ErrorMessages.EMAIL_SUBJECT));
+        message.setText(text);
+
+        javaMailSender.send(message);
     }
 
     private String generateActiveCode() {
