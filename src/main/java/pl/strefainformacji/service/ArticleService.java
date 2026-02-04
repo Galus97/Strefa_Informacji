@@ -11,6 +11,9 @@ import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.repository.ArticleRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
@@ -42,6 +45,15 @@ public class ArticleService {
         article.setShortDescription(articleRequest.getShortDescription());
 
         return ArticleResponse.fromEntity(articleRepository.save(article));
+    }
+
+    public List<ArticleResponse> getAllArticles() {
+        List<ArticleResponse>  articleResponses = new ArrayList<>();
+
+        List<Article> articles = articleRepository.findAll();
+        articles.forEach(article -> articleResponses.add(ArticleResponse.fromEntity(article)));
+
+        return articleResponses;
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
