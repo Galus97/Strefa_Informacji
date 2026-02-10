@@ -10,6 +10,7 @@ import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.entity.User;
 import pl.strefainformacji.exception.UserNotFoundException;
+import pl.strefainformacji.exception.ValidationException;
 import pl.strefainformacji.repository.UserRepository;
 
 @Service
@@ -46,6 +47,11 @@ public class UserService {
 
     }
 
+    public UserResponse saveNewUser(UserRequest userRequest) throws ValidationException {
+        throwIfRequestIsNull(userRequest);
+
+    }
+
     private void throwIfIdIsInvalid(Long id) {
         if(id == null || id <= 0) {
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_USER_ID));
@@ -61,5 +67,15 @@ public class UserService {
         if(userRequest == null){
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.USER_REQUEST_IS_NULL));
         }
+    }
+
+    private User buildUserFormRequest(UserRequest userRequest){
+        return  User.builder()
+                .firstName(userRequest.getFirstName())
+                .lastName(userRequest.getLastName())
+                .email(userRequest.getEmail())
+                //.emailCode()
+                .password(userRequest.getPassword())
+                .build();
     }
 }
