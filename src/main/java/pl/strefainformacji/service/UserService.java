@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.component.RegisterValidator;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.entity.User;
@@ -13,12 +14,15 @@ import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.exception.ValidationException;
 import pl.strefainformacji.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final MessageService messageService;
     private final PasswordEncoder passwordEncoder;
+    private final RegisterValidator registerValidator;
 
     public UserResponse getUserResponse(Long userId){
         throwIfIdIsInvalid(userId);
@@ -49,6 +53,15 @@ public class UserService {
 
     public UserResponse saveNewUser(UserRequest userRequest) throws ValidationException {
         throwIfRequestIsNull(userRequest);
+        User user = buildUserFormRequest(userRequest);
+
+        List<String> validationFailures = registerValidator.validateErrors(user);
+
+        if (validationFailures.isEmpty()) {
+            return UserResponse.fromEntity(userRepository.save(user));
+        } else  {
+            throw new ValidationException(validationFailures);
+        }
 
     }
 
