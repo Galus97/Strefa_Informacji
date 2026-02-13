@@ -15,6 +15,8 @@ import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.exception.ValidationException;
 import pl.strefainformacji.service.UserService;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -26,14 +28,16 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserResponse(id));
     }
 
-//    @PostMapping
-//    public ResponseEntity<?> saveUser(@RequestBody UserRequest userRequest) {
-//        try {
-//
-//        } catch (ValidationException e) {
-//            return ResponseEntity.badRequest().body(e.getValidationsErrors());
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<?> saveUser(@RequestBody UserRequest userRequest) {
+        try {
+            UserResponse savedUser = userService.saveNewUser(userRequest);
+            return ResponseEntity.created(URI.create("/user/" + savedUser.userId()))
+                    .body(savedUser);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getValidationsErrors());
+        }
+    }
 
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
