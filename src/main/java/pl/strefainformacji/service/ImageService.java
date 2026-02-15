@@ -19,9 +19,9 @@ public class ImageService {
     private final MessageService messageService;
     private final ArticleRepository articleRepository;
 
-    public ImageResponse saveImage(ImageRequest imageRequest) {
+    public ImageResponse saveImageResponse(ImageRequest imageRequest) {
         throwIfRequestIsNotValid(imageRequest);
-
+        return ImageResponse.fromEntity(imageRepository.save(buildImageFromRequest(imageRequest)));
     }
 
     public ImageResponse getImageResponse(Long imageId) {
