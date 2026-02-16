@@ -29,6 +29,11 @@ public class ImageService {
         return ImageResponse.fromEntity(getImageOrThrowIfNotExist(imageId));
     }
 
+    public void deleteImage(Long imageId) {
+        throwIfIdIsInvalid(imageId);
+        imageRepository.delete(getImageOrThrowIfNotExist(imageId));
+    }
+
     private void throwIfIdIsInvalid(Long imageId) {
         if (imageId == null || imageId <= 0) {
             throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_IMAGE_ID));
