@@ -2,9 +2,12 @@ package pl.strefainformacji.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pl.strefainformacji.component.Category;
 import pl.strefainformacji.entity.Article;
+
+import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-
+    List<Article> findArticlesByCategories(Category category);
 }
