@@ -1,7 +1,8 @@
 package pl.strefainformacji.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ImageRequest;
@@ -18,6 +19,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final MessageService messageService;
     private final ArticleRepository articleRepository;
+    
 
     public ImageResponse saveImageResponse(ImageRequest imageRequest) {
         throwIfRequestIsNotValid(imageRequest);
