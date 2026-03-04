@@ -32,7 +32,6 @@ public class UserData {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long UserDataId;
 
-
     @Size(min = 3)
     private String city;
 
