@@ -1,34 +1,40 @@
 package pl.strefainformacji.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import pl.strefainformacji.component.ErrorMessages;
 
-import java.util.HashMap;
-import java.util.Map;
+import pl.strefainformacji.component.ErrorMessages;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ArticleNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleArticleNotFoundException(ArticleNotFoundException e) {
+    public ResponseEntity<Map<String, String>> handleArticleNotFoundException (ArticleNotFoundException e) {
         return getMapResponseEntity(e);
     }
 
     @ExceptionHandler(ImageNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleImageNotFoundException(ImageNotFoundException e) {
+    public ResponseEntity<Map<String, String>> handleImageNotFoundException (ImageNotFoundException e) {
         return getMapResponseEntity(e);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException e) {
+    public ResponseEntity<Map<String, String>> handleUserNotFoundException (UserNotFoundException e) {
+        return getMapResponseEntity(e);
+    }
+
+    @ExceptionHandler(UserDataNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserDataNotFoundException (UserDataNotFoundException e) {
         return getMapResponseEntity(e);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<String> handleIllegalArgumentException (IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
