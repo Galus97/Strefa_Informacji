@@ -18,6 +18,7 @@ public final class ErrorMessages {
     public static final String IMAGE_REQUEST_IS_NULL = "error.imageRequestIsNull";
 
     public static final String INVALID_USER_DATA_ID = "error.invalidDataUserId";
+    public static final String USER_DATA_NOT_FOUND = "error.userDataNotFoundException";
 
     public static final String VERIFICATION_CODE = "verificationCodes";
     public static final String EMAIL_TEXT = "email.text";
