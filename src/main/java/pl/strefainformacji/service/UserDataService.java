@@ -16,9 +16,14 @@ public class UserDataService {
     private final UserDataRepository userDataRepository;
     private final MessageService messageService;
 
-    public UserDataResponse getUserData(Long id) {
-        throwIfIdIsInvalid(id);
-        return UserDataResponse.fromEntity(getUserDataOrThrowIfNotExist(id)); 
+    public UserDataResponse getUserData(Long userDataId) {
+        throwIfIdIsInvalid(userDataId);
+        return UserDataResponse.fromEntity(getUserDataOrThrowIfNotExist(userDataId)); 
+    }
+
+    public void deleteUserData (Long userDataId) {
+        throwIfIdIsInvalid(userDataId);
+        userDataRepository.deleteById(userDataId);
     }
 
     private void throwIfIdIsInvalid(Long id) {
