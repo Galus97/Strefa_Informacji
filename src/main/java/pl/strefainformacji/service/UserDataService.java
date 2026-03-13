@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
 import pl.strefainformacji.entity.UserData;
 import pl.strefainformacji.exception.UserDataNotFoundException;
@@ -24,6 +25,16 @@ public class UserDataService {
     public void deleteUserData (Long userDataId) {
         throwIfIdIsInvalid(userDataId);
         userDataRepository.deleteById(userDataId);
+    }
+
+    public UserDataResponse saveUserData (UserDataRequest userDataRequest) {
+        
+    }
+
+    private void throwIfRequestIsNull(UserDataRequest userDataRequest) {
+        if(userDataRequest == null){
+            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.USER_REQUEST_IS_NULL));
+        }
     }
 
     private void throwIfIdIsInvalid(Long id) {
