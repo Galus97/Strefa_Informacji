@@ -30,7 +30,7 @@ public class UserData {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long UserDataId;
+    private Long userDataId;
 
     @Size(min = 3)
     private String city;
