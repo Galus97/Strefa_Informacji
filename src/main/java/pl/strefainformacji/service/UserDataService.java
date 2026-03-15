@@ -31,6 +31,7 @@ public class UserDataService {
 
     public UserDataResponse saveUserData(UserDataRequest userDataRequest) {
        throwIfRequestIsNull(userDataRequest);
+       
        return UserDataResponse.fromEntity(userDataRepository.save(buildUserDataFromRequest(userDataRequest)));
     }
 
