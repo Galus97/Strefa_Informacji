@@ -1,7 +1,7 @@
 package pl.strefainformacji.service;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
@@ -31,8 +31,25 @@ public class UserDataService {
 
     public UserDataResponse saveUserData(UserDataRequest userDataRequest) {
        throwIfRequestIsNull(userDataRequest);
-       
+
        return UserDataResponse.fromEntity(userDataRepository.save(buildUserDataFromRequest(userDataRequest)));
+    }
+
+    @Transactional
+    public UserDataResponse updateUserData(UserDataRequest userDataRequest) {
+        throwIfRequestIsNull(userDataRequest);
+        throwIfIdIsInvalid(userDataRequest.getUserDataId());
+
+        UserData existingUserData = getUserDataOrThrowIfNotExist(userDataRequest.getUserDataId());
+        existingUserData.setCity(userDataRequest.getCity());
+        existingUserData.setStreet(userDataRequest.getStreet());
+        existingUserData.setStreetNumber(userDataRequest.getStreetNumber());
+        existingUserData.setApartmentNumber(userDataRequest.getApartmentNumber());
+        existingUserData.setZipCode(userDataRequest.getZipCode());
+        existingUserData.setPhoneNumber(userDataRequest.getPhoneNumber());
+        existingUserData.setUser(userRepository.findById(userDataRequest.getUserRequest().getUserId()));    
+
+        return UserDataResponse.fromEntity(userDataRepository.save(existingUserData));
     }
 
     private void throwIfRequestIsNull(UserDataRequest userDataRequest) {
