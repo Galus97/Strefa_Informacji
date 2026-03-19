@@ -63,6 +63,7 @@ public class ArticleService {
                 .title(articleRequest.getTitle())
                 .shortDescription(articleRequest.getShortDescription())
                 .description(articleRequest.getDescription())
+                .isSubscriber(articleRequest.getSubscriber())
                 .build();
     }
 
