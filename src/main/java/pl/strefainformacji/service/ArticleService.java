@@ -1,8 +1,12 @@
 package pl.strefainformacji.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ArticleRequest;
@@ -10,9 +14,6 @@ import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.repository.ArticleRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,15 +68,15 @@ public class ArticleService {
                 .build();
     }
 
-    private void throwIfIdIsInvalid(Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_ARTICLE_ID, id));
+    private void throwIfIdIsInvalid(Long articleId) {
+        if (articleId == null || articleId <= 0) {
+            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_ARTICLE_ID, articleId));
         }
     }
 
-    private Article getArticleOrThrowIfNotExist(Long id) {
-        return articleRepository.findById(id).orElseThrow(
-                () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, id)));
+    private Article getArticleOrThrowIfNotExist(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(
+                () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, articleId)));
     }
 
     private void throwIfRequestIsNull(ArticleRequest articleRequest) {
