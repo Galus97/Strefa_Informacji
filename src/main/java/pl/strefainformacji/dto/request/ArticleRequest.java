@@ -10,4 +10,5 @@ public class ArticleRequest {
     private String title;
     private String shortDescription;
     private String description;
+    private Boolean isSubscriber;
 }
