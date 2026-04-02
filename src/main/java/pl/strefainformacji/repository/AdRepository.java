@@ -1,5 +1,9 @@
 package pl.strefainformacji.repository;
 
-public class AdRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import pl.strefainformacji.entity.Ad;
+
+public interface  AdRepository extends JpaRepository<Ad, Long>{
 
 }
