@@ -47,7 +47,7 @@ public class UserDataService {
         existingUserData.setApartmentNumber(userDataRequest.getApartmentNumber());
         existingUserData.setZipCode(userDataRequest.getZipCode());
         existingUserData.setPhoneNumber(userDataRequest.getPhoneNumber());
-        //existingUserData.setUser(userRepository.findById(userDataRequest.getUserRequest().getUserId()));    
+        existingUserData.setUser(userRepository.findById(userDataRequest.getUserRequest().getUserId()).get());
 
         return UserDataResponse.fromEntity(userDataRepository.save(existingUserData));
     }
