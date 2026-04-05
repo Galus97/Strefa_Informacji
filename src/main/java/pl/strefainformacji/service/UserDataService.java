@@ -9,6 +9,7 @@ import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
 import pl.strefainformacji.entity.UserData;
 import pl.strefainformacji.exception.UserDataNotFoundException;
+import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.repository.UserDataRepository;
 import pl.strefainformacji.repository.UserRepository;
 
@@ -77,7 +78,7 @@ public class UserDataService {
             .zipCode(userDataRequest.getZipCode())
             .phoneNumber(userDataRequest.getPhoneNumber())
             .user(userRepository.findById(userDataRequest.getUserRequest().getUserId())
-                .orElseThrow(() -> new UserDataNotFoundException("")))
+                .orElseThrow(() -> new UserNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND))))
             .build();
         }
 }
