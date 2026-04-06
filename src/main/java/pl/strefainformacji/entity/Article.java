@@ -45,8 +45,6 @@ public class Article {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Boolean isSubscriber;
-
     @NotNull
     private List<Category> categories;
 
