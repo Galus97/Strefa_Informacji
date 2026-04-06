@@ -45,6 +45,8 @@ public class User {
     @Size(min = 5)
     private String password;
 
+    private Boolean isSubscriber;
+
     private boolean enabled;
 
     private String emailCode;
