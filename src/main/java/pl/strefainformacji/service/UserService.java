@@ -87,7 +87,6 @@ public class UserService {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .email(userRequest.getEmail())
-                //.emailCode()
                 .password(userRequest.getPassword())
                 .build();
     }

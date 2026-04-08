@@ -45,7 +45,7 @@ public class User {
     @Size(min = 5)
     private String password;
 
-    private Boolean isSubscriber;
+    private boolean isSubscriber;
 
     private boolean enabled;
 
