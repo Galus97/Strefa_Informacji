@@ -32,7 +32,7 @@ public class ArticleService {
 
     public void deleteArticle(Long articleId) {
         throwIfIdIsInvalid(articleId);
-        articleRepository.deleteById(articleId);
+        articleRepository.delete(getArticleOrThrowIfNotExist(articleId));
     }
 
     @Transactional
