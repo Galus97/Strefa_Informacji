@@ -31,7 +31,7 @@ public class UserService {
 
     public void deleteUser(Long userId){
         throwIfIdIsInvalid(userId);
-        userRepository.deleteById(userId);
+        userRepository.delete(getUserOrThrowIfNotExist(userId));
     }
 
     @Transactional

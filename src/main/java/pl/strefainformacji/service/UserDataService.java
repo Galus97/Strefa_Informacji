@@ -27,7 +27,7 @@ public class UserDataService {
 
     public void deleteUserData (Long userDataId) {
         throwIfIdIsInvalid(userDataId);
-        userDataRepository.deleteById(userDataId);
+        userDataRepository.delete(getUserDataOrThrowIfNotExist(userDataId));
     }
 
     public UserDataResponse saveUserData(UserDataRequest userDataRequest) {
