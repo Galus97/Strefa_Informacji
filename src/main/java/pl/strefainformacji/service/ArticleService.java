@@ -21,15 +21,18 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MessageService messageService;
 
+    @Transactional(readOnly = true)
     public ArticleResponse getArticleResponse(Long articleId) {
         throwIfIdIsInvalid(articleId);
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
+    @Transactional
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
         return ArticleResponse.fromEntity(buildArticle(articleRequest));
     }
 
+    @Transactional
     public void deleteArticle(Long articleId) {
         throwIfIdIsInvalid(articleId);
         articleRepository.delete(getArticleOrThrowIfNotExist(articleId));
@@ -48,6 +51,7 @@ public class ArticleService {
         return ArticleResponse.fromEntity(articleRepository.save(article));
     }
 
+    @Transactional(readOnly = true)
     public List<ArticleResponse> getAllArticles() {
         List<ArticleResponse>  articleResponses = new ArrayList<>();
 
