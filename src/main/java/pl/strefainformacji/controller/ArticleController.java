@@ -16,6 +16,7 @@ import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.service.ArticleService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,5 +45,10 @@ public class ArticleController {
     public ResponseEntity<ArticleResponse> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ArticleResponse>> getAllArticles() {
+        return ResponseEntity.ok(articleService.getAllArticles());
     }
 }
