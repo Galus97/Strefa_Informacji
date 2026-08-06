@@ -15,9 +15,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -50,4 +52,8 @@ public class Article {
 
     @NotNull
     private List<Tag> tags;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 }
