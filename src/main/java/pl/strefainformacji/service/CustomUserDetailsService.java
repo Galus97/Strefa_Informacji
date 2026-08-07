@@ -11,6 +11,7 @@ import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.entity.User;
 import pl.strefainformacji.repository.UserRepository;
+import pl.strefainformacji.util.ServiceValidator;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -20,11 +21,11 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final MessageService messageService;
-
+    private final ServiceValidator serviceValidator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        throwIfEmailIsInvalid(email);
+        serviceValidator.throwIfEmailIsInvalid(email);
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -34,11 +35,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")), user);
         }
         throw new UsernameNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND, email));
-    }
-
-    private void throwIfEmailIsInvalid(String email) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.EMAIL_IS_INVALID, email));
-        }
     }
 }

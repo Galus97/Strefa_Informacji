@@ -14,34 +14,37 @@ import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.repository.ArticleRepository;
+import pl.strefainformacji.util.ServiceValidator;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MessageService messageService;
+    private final ServiceValidator serviceValidator;
 
     @Transactional(readOnly = true)
     public ArticleResponse getArticleResponse(Long articleId) {
-        throwIfIdIsInvalid(articleId);
+        serviceValidator.throwIfIdIsNotValid(articleId, ErrorMessages.INVALID_ARTICLE_ID);
         return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
     }
 
     @Transactional
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
+        serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
         return ArticleResponse.fromEntity(buildArticle(articleRequest));
     }
 
     @Transactional
     public void deleteArticle(Long articleId) {
-        throwIfIdIsInvalid(articleId);
+        serviceValidator.throwIfIdIsNotValid(articleId, ErrorMessages.INVALID_ARTICLE_ID);
         articleRepository.delete(getArticleOrThrowIfNotExist(articleId));
     }
 
     @Transactional
     public ArticleResponse updateArticle(ArticleRequest articleRequest) {
-        throwIfRequestIsNull(articleRequest);
-        throwIfIdIsInvalid(articleRequest.getArticleId());
+        serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
+        serviceValidator.throwIfIdIsNotValid(articleRequest.getArticleId(), ErrorMessages.INVALID_ARTICLE_ID);
 
         Article article = getArticleOrThrowIfNotExist(articleRequest.getArticleId());
         article.setTitle(articleRequest.getTitle());
@@ -62,7 +65,7 @@ public class ArticleService {
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
-        throwIfRequestIsNull(articleRequest);
+        serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
         return Article.builder()
                 .articleId(articleRequest.getArticleId())
                 .title(articleRequest.getTitle())
@@ -71,20 +74,9 @@ public class ArticleService {
                 .build();
     }
 
-    private void throwIfIdIsInvalid(Long articleId) {
-        if (articleId == null || articleId <= 0) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_ARTICLE_ID, articleId));
-        }
-    }
-
-    private Article getArticleOrThrowIfNotExist(Long articleId) {
+    // Used in other classes
+    public Article getArticleOrThrowIfNotExist(Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, articleId)));
-    }
-
-    private void throwIfRequestIsNull(ArticleRequest articleRequest) {
-        if (articleRequest == null) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.ARTICLE_REQUEST_IS_NULL));
-        }
     }
 }

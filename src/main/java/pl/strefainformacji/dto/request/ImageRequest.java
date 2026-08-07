@@ -9,5 +9,5 @@ public class ImageRequest {
     private Long imageId;
     private String srcImg;
     private String altImg;
-    private ArticleRequest articleRequest;
+    private Long articleId;
 }
