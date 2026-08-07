@@ -74,8 +74,8 @@ public class ArticleService {
                 .build();
     }
 
-
-    private Article getArticleOrThrowIfNotExist(Long articleId) {
+    // Used in other classes
+    public Article getArticleOrThrowIfNotExist(Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new ArticleNotFoundException(messageService.getMessage(ErrorMessages.ARTICLE_NOT_FOUND, articleId)));
     }
