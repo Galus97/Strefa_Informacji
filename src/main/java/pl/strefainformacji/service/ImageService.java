@@ -14,6 +14,8 @@ import pl.strefainformacji.repository.ArticleRepository;
 import pl.strefainformacji.repository.ImageRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ImageService {
@@ -22,7 +24,7 @@ public class ImageService {
     private final ArticleService articleService;
     private final ServiceValidator serviceValidator;
 
-    public ImageResponse getImageResponse(Long imageId) {
+    public ImageResponse getImage(Long imageId) {
         serviceValidator.throwIfIdIsNotValid(imageId, ErrorMessages.INVALID_IMAGE_ID);
         return ImageResponse.fromEntity(getImageOrThrowIfNotExist(imageId));
     }
@@ -30,6 +32,18 @@ public class ImageService {
     public ImageResponse saveImage(ImageRequest imageRequest) {
         serviceValidator.throwIfRequestIsNull(imageRequest, ErrorMessages.IMAGE_REQUEST_IS_NULL);
         return ImageResponse.fromEntity(imageRepository.save(buildImageFromRequest(imageRequest)));
+    }
+
+    public ImageResponse updateImage(ImageRequest imageRequest) {
+        serviceValidator.throwIfRequestIsNull(imageRequest, ErrorMessages.IMAGE_REQUEST_IS_NULL);
+        serviceValidator.throwIfIdIsNotValid(imageRequest.getImageId(), ErrorMessages.INVALID_IMAGE_ID);
+
+        Image existingImage = getImageOrThrowIfNotExist(imageRequest.getImageId());
+        existingImage.setSrcImg(imageRequest.getSrcImg());
+        existingImage.setAltImg(imageRequest.getAltImg());
+        existingImage.setArticle(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()));
+
+        return ImageResponse.fromEntity(imageRepository.save(existingImage));
     }
 
     public void deleteImage(Long imageId) {
