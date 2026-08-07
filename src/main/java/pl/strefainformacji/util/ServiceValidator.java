@@ -9,4 +9,9 @@ import pl.strefainformacji.component.MessageService;
 public class ServiceValidator {
     private final MessageService messageService;
 
+    public void throwIfIdIsNotValid(Long id, String errorMessage) {
+        if (id != null && id <= 0) {
+            throw new IllegalArgumentException(messageService.getMessage(errorMessage, id));
+        }
+    }
 }
