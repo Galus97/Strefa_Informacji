@@ -4,8 +4,12 @@ import pl.strefainformacji.entity.Article;
 
 import java.time.LocalDateTime;
 
-public record ArticleResponse(Long articleId, String title, String shortDescription,
-                              String description, LocalDateTime createdAt) {
+public record ArticleResponse(
+        Long articleId,
+        String title,
+        String shortDescription,
+        String description,
+        LocalDateTime createdAt) {
 
     public static ArticleResponse fromEntity(Article article) {
         return new ArticleResponse(
