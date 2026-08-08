@@ -12,34 +12,32 @@ import pl.strefainformacji.exception.UserDataNotFoundException;
 import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.repository.UserDataRepository;
 import pl.strefainformacji.repository.UserRepository;
+import pl.strefainformacji.util.ServiceValidator;
 
 @Service
 @RequiredArgsConstructor
 public class UserDataService {
     private final UserDataRepository userDataRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final MessageService messageService;
+    private final ServiceValidator serviceValidator;
 
+    @Transactional(readOnly = true)
     public UserDataResponse getUserData(Long userDataId) {
-        throwIfIdIsInvalid(userDataId);
+        serviceValidator.throwIfIdIsNotValid(userDataId, ErrorMessages.INVALID_USER_DATA_ID);
         return UserDataResponse.fromEntity(getUserDataOrThrowIfNotExist(userDataId)); 
     }
 
-    public void deleteUserData (Long userDataId) {
-        throwIfIdIsInvalid(userDataId);
-        userDataRepository.delete(getUserDataOrThrowIfNotExist(userDataId));
-    }
-
+    @Transactional
     public UserDataResponse saveUserData(UserDataRequest userDataRequest) {
-       throwIfRequestIsNull(userDataRequest);
-
-       return UserDataResponse.fromEntity(userDataRepository.save(buildUserDataFromRequest(userDataRequest)));
+        serviceValidator.throwIfRequestIsNull(userDataRequest, ErrorMessages.USER_DATA_REQUEST_IS_NULL);
+        return UserDataResponse.fromEntity(userDataRepository.save(buildUserDataFromRequest(userDataRequest)));
     }
 
     @Transactional
     public UserDataResponse updateUserData(UserDataRequest userDataRequest) {
-        throwIfRequestIsNull(userDataRequest);
-        throwIfIdIsInvalid(userDataRequest.getUserDataId());
+        serviceValidator.throwIfRequestIsNull(userDataRequest, ErrorMessages.USER_DATA_REQUEST_IS_NULL);
+        serviceValidator.throwIfIdIsNotValid(userDataRequest.getUserDataId(), ErrorMessages.INVALID_USER_DATA_ID);
 
         UserData existingUserData = getUserDataOrThrowIfNotExist(userDataRequest.getUserDataId());
         existingUserData.setCity(userDataRequest.getCity());
@@ -48,20 +46,15 @@ public class UserDataService {
         existingUserData.setApartmentNumber(userDataRequest.getApartmentNumber());
         existingUserData.setZipCode(userDataRequest.getZipCode());
         existingUserData.setPhoneNumber(userDataRequest.getPhoneNumber());
-        existingUserData.setUser(userRepository.findById(userDataRequest.getUserRequest().getUserId()).get());
+        existingUserData.setUser(userService.getUserOrThrowIfNotExist(userDataRequest.getUserDataId()));
 
         return UserDataResponse.fromEntity(userDataRepository.save(existingUserData));
     }
 
-    private void throwIfRequestIsNull(UserDataRequest userDataRequest) {
-        if(userDataRequest == null){
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.USER_DATA_REQUEST_IS_NULL));
-        }
-    }
-
-    private void throwIfIdIsInvalid(Long id) {
-        if(id == null || id < 1) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_USER_DATA_ID));        }
+    @Transactional
+    public void deleteUserData (Long userDataId) {
+        serviceValidator.throwIfIdIsNotValid(userDataId, ErrorMessages.INVALID_USER_DATA_ID);
+        userDataRepository.delete(getUserDataOrThrowIfNotExist(userDataId));
     }
 
     private UserData getUserDataOrThrowIfNotExist(Long id) {
@@ -77,8 +70,7 @@ public class UserDataService {
             .apartmentNumber(userDataRequest.getApartmentNumber())
             .zipCode(userDataRequest.getZipCode())
             .phoneNumber(userDataRequest.getPhoneNumber())
-            .user(userRepository.findById(userDataRequest.getUserRequest().getUserId())
-                .orElseThrow(() -> new UserNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND))))
+            .user(userService.getUserOrThrowIfNotExist(userDataRequest.getUserId()))
             .build();
         }
 }

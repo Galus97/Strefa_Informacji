@@ -13,5 +13,5 @@ public class UserDataRequest {
     private Integer apartmentNumber;
     private String zipCode;
     private Integer phoneNumber;
-    private UserRequest userRequest;
+    private Long userId;
 }

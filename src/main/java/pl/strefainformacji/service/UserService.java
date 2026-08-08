@@ -13,6 +13,7 @@ import pl.strefainformacji.entity.User;
 import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.exception.ValidationException;
 import pl.strefainformacji.repository.UserRepository;
+import pl.strefainformacji.util.ServiceValidator;
 
 import java.util.List;
 
@@ -23,21 +24,39 @@ public class UserService {
     private final MessageService messageService;
     private final PasswordEncoder passwordEncoder;
     private final RegisterValidator registerValidator;
+    private final ServiceValidator serviceValidator;
 
+    @Transactional(readOnly = true)
     public UserResponse getUserResponse(Long userId){
-        throwIfIdIsInvalid(userId);
+        serviceValidator.throwIfIdIsNotValid(userId, ErrorMessages.INVALID_USER_ID);
         return UserResponse.fromEntity(getUserOrThrowIfNotExist(userId));
     }
 
+    @Transactional
+    public UserResponse saveNewUser(UserRequest userRequest) throws ValidationException {
+        serviceValidator.throwIfRequestIsNull(userRequest, ErrorMessages.USER_REQUEST_IS_NULL);
+        User user = buildUserFormRequest(userRequest);
+
+        List<String> validationFailures = registerValidator.validateErrors(user);
+
+        if (validationFailures.isEmpty()) {
+            return UserResponse.fromEntity(userRepository.save(user));
+        } else  {
+            throw new ValidationException(validationFailures);
+        }
+
+    }
+
+    @Transactional
     public void deleteUser(Long userId){
-        throwIfIdIsInvalid(userId);
+        serviceValidator.throwIfIdIsNotValid(userId, ErrorMessages.INVALID_USER_ID);
         userRepository.delete(getUserOrThrowIfNotExist(userId));
     }
 
     @Transactional
     public UserResponse updateUser(UserRequest userRequest){
-        throwIfRequestIsNull(userRequest);
-        throwIfIdIsInvalid(userRequest.getUserId());
+        serviceValidator.throwIfRequestIsNull(userRequest, ErrorMessages.USER_REQUEST_IS_NULL);
+        serviceValidator.throwIfIdIsNotValid(userRequest.getUserId(), ErrorMessages.INVALID_USER_ID);
 
         User existingUser = getUserOrThrowIfNotExist(userRequest.getUserId());
         existingUser.setFirstName(userRequest.getFirstName());
@@ -51,35 +70,11 @@ public class UserService {
 
     }
 
-    public UserResponse saveNewUser(UserRequest userRequest) throws ValidationException {
-        throwIfRequestIsNull(userRequest);
-        User user = buildUserFormRequest(userRequest);
-
-        List<String> validationFailures = registerValidator.validateErrors(user);
-
-        if (validationFailures.isEmpty()) {
-            return UserResponse.fromEntity(userRepository.save(user));
-        } else  {
-            throw new ValidationException(validationFailures);
-        }
-
-    }
-
-    private void throwIfIdIsInvalid(Long id) {
-        if(id == null || id <= 0) {
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.INVALID_USER_ID));
-        }
-    }
-
-    private User getUserOrThrowIfNotExist(Long id){
-        return userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND, id)));
-    }
-
-    private void throwIfRequestIsNull(UserRequest userRequest){
-        if(userRequest == null){
-            throw new IllegalArgumentException(messageService.getMessage(ErrorMessages.USER_REQUEST_IS_NULL));
-        }
+    //Used in others classes
+    public User getUserOrThrowIfNotExist(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        messageService.getMessage(ErrorMessages.USER_NOT_FOUND, id)));
     }
 
     private User buildUserFormRequest(UserRequest userRequest){
