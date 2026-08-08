@@ -2,8 +2,15 @@ package pl.strefainformacji.dto.response;
 
 import pl.strefainformacji.entity.UserData;
 
-public record UserDataResponse (Long UserDataId, String city, String street, Integer streetNumber,
-Integer apartmentNumber, String zipCode, Integer phoneNumber, UserResponse userResponse) {
+public record UserDataResponse (
+        Long UserDataId,
+        String city,
+        String street,
+        Integer streetNumber,
+        Integer apartmentNumber,
+        String zipCode,
+        Integer phoneNumber,
+        Long userId) {
 
     public static UserDataResponse fromEntity(UserData userData) {
         return new UserDataResponse (
@@ -14,7 +21,7 @@ Integer apartmentNumber, String zipCode, Integer phoneNumber, UserResponse userR
             userData.getApartmentNumber(),
             userData.getZipCode(),
             userData.getPhoneNumber(),
-            UserResponse.fromEntity(userData.getUser())
+            userData.getUserDataId()
         );
     }
 }
