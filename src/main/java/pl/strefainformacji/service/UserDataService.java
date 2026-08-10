@@ -7,6 +7,7 @@ import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
+import pl.strefainformacji.entity.User;
 import pl.strefainformacji.entity.UserData;
 import pl.strefainformacji.exception.UserDataNotFoundException;
 import pl.strefainformacji.exception.UserNotFoundException;
@@ -26,6 +27,12 @@ public class UserDataService {
     public UserDataResponse getUserData(Long userDataId) {
         serviceValidator.throwIfIdIsNotValid(userDataId, ErrorMessages.INVALID_USER_DATA_ID);
         return UserDataResponse.fromEntity(getUserDataOrThrowIfNotExist(userDataId)); 
+    }
+
+    public UserDataResponse getUserDataByUser(Long userId) {
+        serviceValidator.throwIfIdIsNotValid(userId, ErrorMessages.INVALID_USER_ID);
+        return UserDataResponse.fromEntity(userDataRepository
+                .findByUser(userService.getUserOrThrowIfNotExist(userId)));
     }
 
     @Transactional
@@ -56,6 +63,7 @@ public class UserDataService {
         serviceValidator.throwIfIdIsNotValid(userDataId, ErrorMessages.INVALID_USER_DATA_ID);
         userDataRepository.delete(getUserDataOrThrowIfNotExist(userDataId));
     }
+
 
     private UserData getUserDataOrThrowIfNotExist(Long id) {
         return userDataRepository.findById(id).orElseThrow(
