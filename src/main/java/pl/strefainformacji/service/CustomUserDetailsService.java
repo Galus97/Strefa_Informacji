@@ -32,7 +32,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             return new CurrentUser(
                     user.getEmail(),
                     user.getPassword(),
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")), user);
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")),
+                    user);
         }
         throw new UsernameNotFoundException(messageService.getMessage(ErrorMessages.USER_NOT_FOUND, email));
     }
