@@ -26,4 +26,9 @@ public class UserDataController {
         return ResponseEntity.created(URI.create("/userdata/" + savedUserData.UserDataId()))
                 .body(savedUserData);
     }
+
+    @PutMapping
+    public ResponseEntity<UserDataResponse> updateUserData(@RequestBody UserDataRequest userDataRequest) {
+        return ResponseEntity.ok(userDataService.updateUserData(userDataRequest));
+    }
 }
