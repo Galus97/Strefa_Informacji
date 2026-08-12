@@ -41,7 +41,7 @@ public class Image {
     private String altImg;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "articleId", nullable = false)
+    @JoinColumn(name = "article_id", nullable = false)
     @JsonIgnore
     private Article article;
 }
