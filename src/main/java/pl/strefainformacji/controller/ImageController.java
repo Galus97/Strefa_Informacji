@@ -8,6 +8,7 @@ import pl.strefainformacji.dto.response.ImageResponse;
 import pl.strefainformacji.service.ImageService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,5 +37,10 @@ public class ImageController {
     public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
         imageService.deleteImage(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/all/article/{id}")
+    public ResponseEntity<List<ImageResponse>> showAllArticleImages(@PathVariable Long id) {
+        return ResponseEntity.ok(imageService.getAllImagesByArticle(id));
     }
 }
