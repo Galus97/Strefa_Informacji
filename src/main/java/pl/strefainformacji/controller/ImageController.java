@@ -26,4 +26,11 @@ public class ImageController {
         return ResponseEntity.created(URI.create("/image/" + savedImage.imageId()))
                 .body(savedImage);
     }
+
+    @PutMapping
+    public ResponseEntity<ImageResponse> updateImage(@RequestBody ImageRequest imageRequest) {
+        return ResponseEntity.ok(imageService.updateImage(imageRequest));
+    }
+
+
 }
