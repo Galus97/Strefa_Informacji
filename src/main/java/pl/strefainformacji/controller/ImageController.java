@@ -2,12 +2,12 @@ package pl.strefainformacji.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.strefainformacji.dto.request.ImageRequest;
 import pl.strefainformacji.dto.response.ImageResponse;
 import pl.strefainformacji.service.ImageService;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +20,10 @@ public class ImageController {
         return ResponseEntity.ok(imageService.getImage(id));
     }
 
-
+    @PostMapping
+    public ResponseEntity<ImageResponse> saveImage(@RequestBody ImageRequest imageRequest) {
+        ImageResponse savedImage = imageService.saveImage(imageRequest);
+        return ResponseEntity.created(URI.create("/image/" + savedImage.imageId()))
+                .body(savedImage);
+    }
 }
