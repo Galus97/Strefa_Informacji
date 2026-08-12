@@ -7,6 +7,7 @@ import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ImageRequest;
 import pl.strefainformacji.dto.response.ImageResponse;
+import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.entity.Image;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.exception.ImageNotFoundException;
@@ -14,6 +15,7 @@ import pl.strefainformacji.repository.ArticleRepository;
 import pl.strefainformacji.repository.ImageRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,6 +51,11 @@ public class ImageService {
     public void deleteImage(Long imageId) {
         serviceValidator.throwIfIdIsNotValid(imageId, ErrorMessages.INVALID_IMAGE_ID);
         imageRepository.delete(getImageOrThrowIfNotExist(imageId));
+    }
+
+    public List<ImageResponse> getAllImagesByArticle(Long articleId) {
+        Article article = articleService.getArticleOrThrowIfNotExist(articleId);
+        return ImageResponse.fromEntityList(imageRepository.findAllByArticle(article));
     }
 
     private Image getImageOrThrowIfNotExist(Long imageId) {
