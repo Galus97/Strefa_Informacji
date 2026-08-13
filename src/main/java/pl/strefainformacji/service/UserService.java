@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
-import pl.strefainformacji.component.RegisterValidator;
+import pl.strefainformacji.util.RegisterValidator;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.entity.User;
