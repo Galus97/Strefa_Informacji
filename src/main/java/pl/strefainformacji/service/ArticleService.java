@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.ArticleRequest;
@@ -62,6 +63,12 @@ public class ArticleService {
         articles.forEach(article -> articleResponses.add(ArticleResponse.fromEntity(article)));
 
         return articleResponses;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> getArticlesByCategory(Category category) {
+        return ArticleResponse.fromEntityList(
+                articleRepository.findAllArticlesByCategory(category));
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {

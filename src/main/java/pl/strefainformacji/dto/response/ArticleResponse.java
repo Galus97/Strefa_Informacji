@@ -3,6 +3,7 @@ package pl.strefainformacji.dto.response;
 import pl.strefainformacji.entity.Article;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ArticleResponse(
         Long articleId,
@@ -18,5 +19,11 @@ public record ArticleResponse(
                 article.getShortDescription(),
                 article.getDescription(),
                 article.getCreatedAt());
+    }
+
+    public static List<ArticleResponse> fromEntityList(List<Article> articleList) {
+        return articleList.stream()
+                .map(ArticleResponse::fromEntity)
+                .toList();
     }
 }
