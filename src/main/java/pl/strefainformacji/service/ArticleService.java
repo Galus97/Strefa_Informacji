@@ -1,5 +1,7 @@
 package pl.strefainformacji.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
@@ -66,9 +69,32 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getArticlesByCategory(Category category) {
+    public List<ArticleResponse> getArticlesByCategory(List<Category> categories) {
         return ArticleResponse.fromEntityList(
-                articleRepository.findAllArticlesByCategory(category));
+                articleRepository.findAllArticlesByCategories(categories));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> getArticleByTags(List<Tag> tags) {
+        return ArticleResponse.fromEntityList(
+                articleRepository.findArticlesByTags(tags));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> getArticlesCreatedAtBetween(String from, String to) {
+        if (from == null || to == null) {
+            throw new IllegalArgumentException(ErrorMessages.INVALID_PARAMS);
+        }
+
+        try {
+            LocalDateTime fromDate = LocalDateTime.parse(from);
+            LocalDateTime toDate = LocalDateTime.parse(to);
+            return ArticleResponse.fromEntityList(articleRepository
+                    .findAllByCreatedAtBetween(fromDate, toDate));
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(ErrorMessages.INVALID_FORMAT_PARAMS);
+        }
+
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
