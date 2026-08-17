@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
@@ -66,9 +67,15 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getArticlesByCategory(Category category) {
+    public List<ArticleResponse> getArticlesByCategory(List<Category> categories) {
         return ArticleResponse.fromEntityList(
-                articleRepository.findAllArticlesByCategory(category));
+                articleRepository.findAllArticlesByCategories(categories));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> getArticleByTags(List<Tag> tags) {
+        return ArticleResponse.fromEntityList(
+                articleRepository.findArticlesByTags(tags));
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
