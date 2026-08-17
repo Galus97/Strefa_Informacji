@@ -1,5 +1,7 @@
 package pl.strefainformacji.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,23 @@ public class ArticleService {
     public List<ArticleResponse> getArticleByTags(List<Tag> tags) {
         return ArticleResponse.fromEntityList(
                 articleRepository.findArticlesByTags(tags));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> getArticlesCreatedAtBetween(String from, String to) {
+        if (from == null || to == null) {
+            throw new IllegalArgumentException(ErrorMessages.INVALID_PARAMS);
+        }
+
+        try {
+            LocalDateTime fromDate = LocalDateTime.parse(from);
+            LocalDateTime toDate = LocalDateTime.parse(to);
+            return ArticleResponse.fromEntityList(articleRepository
+                    .findAllByCreatedAtBetween(fromDate, toDate));
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(ErrorMessages.INVALID_FORMAT_PARAMS);
+        }
+
     }
 
     private Article buildArticle(ArticleRequest articleRequest) {
