@@ -3,14 +3,8 @@ package pl.strefainformacji.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.strefainformacji.component.Category;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.service.ArticleService;
@@ -50,5 +44,10 @@ public class ArticleController {
     @GetMapping("/all")
     public ResponseEntity<List<ArticleResponse>> getAllArticles() {
         return ResponseEntity.ok(articleService.getAllArticles());
+    }
+
+    @GetMapping("/by-categories")
+    public ResponseEntity<List<ArticleResponse>> getArticlesByCategories(@RequestParam List<Category> categories) {
+        return ResponseEntity.ok(articleService.getArticlesByCategory(categories));
     }
 }
