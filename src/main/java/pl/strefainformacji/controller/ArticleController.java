@@ -42,11 +42,6 @@ public class ArticleController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ArticleResponse>> getAllArticles() {
-        return ResponseEntity.ok(articleService.getAllArticles());
-    }
-
     @GetMapping("/by-categories")
     public ResponseEntity<List<ArticleResponse>> getArticlesByCategories(@RequestParam List<Category> categories) {
         return ResponseEntity.ok(articleService.getArticlesByCategory(categories));
@@ -55,5 +50,15 @@ public class ArticleController {
     @GetMapping("/by-tags")
     public ResponseEntity<List<ArticleResponse>> getArticlesByTags(@RequestParam List<Tag> tags) {
         return ResponseEntity.ok(articleService.getArticleByTags(tags));
+    }
+
+    @GetMapping("time")
+    public ResponseEntity<List<ArticleResponse>> getArticlesByDates(
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to) {
+        if (from != null && to != null) {
+            return ResponseEntity.ok(articleService.getArticlesCreatedAtBetween(from, to));
+        }
+        return ResponseEntity.ok(articleService.getAllArticles());
     }
 }
