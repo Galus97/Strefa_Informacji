@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.strefainformacji.component.Category;
+import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.service.ArticleService;
@@ -49,5 +50,10 @@ public class ArticleController {
     @GetMapping("/by-categories")
     public ResponseEntity<List<ArticleResponse>> getArticlesByCategories(@RequestParam List<Category> categories) {
         return ResponseEntity.ok(articleService.getArticlesByCategory(categories));
+    }
+
+    @GetMapping("/by-tags")
+    public ResponseEntity<List<ArticleResponse>> getArticlesByTags(@RequestParam List<Tag> tags) {
+        return ResponseEntity.ok(articleService.getArticleByTags(tags));
     }
 }
