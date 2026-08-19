@@ -52,7 +52,7 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getArticleByTags(tags));
     }
 
-    @GetMapping("time")
+    @GetMapping("/all/by-time")
     public ResponseEntity<List<ArticleResponse>> getArticlesByDates(
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String to) {
@@ -60,5 +60,10 @@ public class ArticleController {
             return ResponseEntity.ok(articleService.getArticlesCreatedAtBetween(from, to));
         }
         return ResponseEntity.ok(articleService.getAllArticles());
+    }
+
+    @GetMapping("/by-title")
+    public ResponseEntity<ArticleResponse> getArticleByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(articleService.getArticleByTitle(title));
     }
 }
