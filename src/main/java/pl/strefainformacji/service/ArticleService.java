@@ -97,6 +97,14 @@ public class ArticleService {
 
     }
 
+    @Transactional(readOnly = true)
+    public ArticleResponse getArticleByTitle(String title) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException(ErrorMessages.INVALID_PARAM);
+        }
+        return ArticleResponse.fromEntity(articleRepository.findByTitleContainingIgnoreCase(title));
+    }
+
     private Article buildArticle(ArticleRequest articleRequest) {
         serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
         return Article.builder()

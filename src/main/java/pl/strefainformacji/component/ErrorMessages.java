@@ -2,6 +2,7 @@ package pl.strefainformacji.component;
 
 public final class ErrorMessages {
     public static final String ERROR = "error";
+    public static final String INVALID_PARAM = "error.paramIsNotValid";
     public static final String INVALID_PARAMS = "error.paramsAreNotValid";
     public static final String INVALID_FORMAT_PARAMS = "error.paramsFormatNotValid";
 
