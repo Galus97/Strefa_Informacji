@@ -20,4 +20,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findAllByCreatedAtBetween(
             @Param("from")LocalDateTime from,
             @Param("to") LocalDateTime to);
+
+    Article findByTitleContainingIgnoreCase(String title);
 }
