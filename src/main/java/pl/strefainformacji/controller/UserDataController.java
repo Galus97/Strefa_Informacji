@@ -37,4 +37,9 @@ public class UserDataController {
         userDataService.deleteUserData(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDataResponse> getUserDataByUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userDataService.getUserDataByUser(id));
+    }
 }
