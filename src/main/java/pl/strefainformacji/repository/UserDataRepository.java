@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import pl.strefainformacji.entity.User;
 import pl.strefainformacji.entity.UserData;
 
+import java.util.Optional;
+
 public interface UserDataRepository extends JpaRepository<UserData, Long> {
-    UserData findByUser(User user);
+
+    Optional<UserData> findByUser(User user);
 }
