@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @Data
 public class ArticleRequest {
+    private Long articleId;
     private String title;
     private String shortDescription;
     private String description;
