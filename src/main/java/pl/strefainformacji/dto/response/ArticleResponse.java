@@ -1,5 +1,7 @@
 package pl.strefainformacji.dto.response;
 
+import pl.strefainformacji.component.Category;
+import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.entity.Article;
 
 import java.time.LocalDateTime;
@@ -10,16 +12,10 @@ public record ArticleResponse(
         String title,
         String shortDescription,
         String description,
+        List<Category> categories,
+        List<Tag> tags,
         LocalDateTime createdAt) {
 
-    public static ArticleResponse fromEntity(Article article) {
-        return new ArticleResponse(
-                article.getArticleId(),
-                article.getTitle(),
-                article.getShortDescription(),
-                article.getDescription(),
-                article.getCreatedAt());
-    }
 
     public static List<ArticleResponse> fromEntityList(List<Article> articleList) {
         return articleList.stream()
