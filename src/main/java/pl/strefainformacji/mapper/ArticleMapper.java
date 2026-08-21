@@ -1,6 +1,7 @@
 package pl.strefainformacji.mapper;
 
 import org.springframework.stereotype.Component;
+import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
 
@@ -19,4 +20,20 @@ public class ArticleMapper {
                 article.getCreatedAt());
     }
 
+    public List<ArticleResponse> toArticleResponseList(List<Article> articleList) {
+        return articleList.stream()
+                .map(this::toArticleResponse)
+                .toList();
+    }
+
+    public Article toArticleModel(ArticleRequest articleRequest) {
+        return Article.builder()
+                .title(articleRequest.getTitle())
+                .shortDescription(articleRequest.getShortDescription())
+                .description(articleRequest.getDescription())
+                .categories(articleRequest.getCategories())
+                .tags(articleRequest.getTags())
+                .createdAt(articleRequest.getCreatedAt())
+                .build();
+    }
 }
