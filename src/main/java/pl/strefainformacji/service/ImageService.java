@@ -9,14 +9,11 @@ import pl.strefainformacji.dto.request.ImageRequest;
 import pl.strefainformacji.dto.response.ImageResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.entity.Image;
-import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.exception.ImageNotFoundException;
-import pl.strefainformacji.repository.ArticleRepository;
 import pl.strefainformacji.repository.ImageRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
