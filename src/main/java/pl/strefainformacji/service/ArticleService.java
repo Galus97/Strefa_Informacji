@@ -17,6 +17,7 @@ import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
+import pl.strefainformacji.mapper.ArticleMapper;
 import pl.strefainformacji.repository.ArticleRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
@@ -30,13 +31,13 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleResponse getArticleResponse(Long articleId) {
         serviceValidator.throwIfIdIsNotValid(articleId, ErrorMessages.INVALID_ARTICLE_ID);
-        return ArticleResponse.fromEntity(getArticleOrThrowIfNotExist(articleId));
+        return ArticleMapper.toArticleResponse(getArticleOrThrowIfNotExist(articleId));
     }
 
     @Transactional
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
         serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
-        return ArticleResponse.fromEntity(buildArticle(articleRequest));
+        return ArticleMapper.toArticleResponse(ArticleMapper.toArticleModel(articleRequest));
     }
 
     @Transactional
@@ -55,7 +56,7 @@ public class ArticleService {
         article.setDescription(articleRequest.getDescription());
         article.setShortDescription(articleRequest.getShortDescription());
 
-        return ArticleResponse.fromEntity(articleRepository.save(article));
+        return ArticleMapper.toArticleResponse(articleRepository.save(article));
     }
 
     @Transactional(readOnly = true)
@@ -63,21 +64,25 @@ public class ArticleService {
         List<ArticleResponse>  articleResponses = new ArrayList<>();
 
         List<Article> articles = articleRepository.findAll();
-        articles.forEach(article -> articleResponses.add(ArticleResponse.fromEntity(article)));
+        articles.forEach(article -> articleResponses.add(ArticleMapper.toArticleResponse(article)));
 
         return articleResponses;
     }
 
     @Transactional(readOnly = true)
     public List<ArticleResponse> getArticlesByCategory(List<Category> categories) {
-        return ArticleResponse.fromEntityList(
-                articleRepository.findAllArticlesByCategories(categories));
+        return articleRepository.findAllArticlesByCategories(categories)
+                .stream()
+                .map(ArticleMapper::toArticleResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ArticleResponse> getArticleByTags(List<Tag> tags) {
-        return ArticleResponse.fromEntityList(
-                articleRepository.findArticlesByTags(tags));
+        return articleRepository.findArticlesByTags(tags)
+                .stream()
+                .map(ArticleMapper::toArticleResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -89,8 +94,11 @@ public class ArticleService {
         try {
             LocalDateTime fromDate = LocalDateTime.parse(from);
             LocalDateTime toDate = LocalDateTime.parse(to);
-            return ArticleResponse.fromEntityList(articleRepository
-                    .findAllByCreatedAtBetween(fromDate, toDate));
+
+            return articleRepository.findAllByCreatedAtBetween(fromDate, toDate)
+                    .stream()
+                    .map(ArticleMapper::toArticleResponse)
+                    .toList();
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_FORMAT_PARAMS);
         }
@@ -102,17 +110,7 @@ public class ArticleService {
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_PARAM);
         }
-        return ArticleResponse.fromEntity(articleRepository.findByTitleContainingIgnoreCase(title));
-    }
-
-    private Article buildArticle(ArticleRequest articleRequest) {
-        serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
-        return Article.builder()
-                .articleId(articleRequest.getArticleId())
-                .title(articleRequest.getTitle())
-                .shortDescription(articleRequest.getShortDescription())
-                .description(articleRequest.getDescription())
-                .build();
+        return ArticleMapper.toArticleResponse(articleRepository.findByTitleContainingIgnoreCase(title));
     }
 
     // Used in other classes
