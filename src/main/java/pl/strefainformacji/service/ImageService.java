@@ -10,6 +10,7 @@ import pl.strefainformacji.dto.response.ImageResponse;
 import pl.strefainformacji.entity.Article;
 import pl.strefainformacji.entity.Image;
 import pl.strefainformacji.exception.ImageNotFoundException;
+import pl.strefainformacji.mapper.ImageMapper;
 import pl.strefainformacji.repository.ImageRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
@@ -30,7 +31,11 @@ public class ImageService {
 
     public ImageResponse saveImage(ImageRequest imageRequest) {
         serviceValidator.throwIfRequestIsNull(imageRequest, ErrorMessages.IMAGE_REQUEST_IS_NULL);
-        return ImageResponse.fromEntity(imageRepository.save(buildImageFromRequest(imageRequest)));
+
+        Image image = ImageMapper.toImageModel(imageRequest);
+        image.setArticle(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()));
+
+        return ImageResponse.fromEntity(imageRepository.save(image));
     }
 
     public ImageResponse updateImage(ImageRequest imageRequest) {
@@ -59,13 +64,5 @@ public class ImageService {
         return imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(
                         messageService.getMessage(ErrorMessages.IMAGE_NOT_FOUND, imageId)));
-    }
-
-    private Image buildImageFromRequest(ImageRequest imageRequest) {
-        return Image.builder()
-                .srcImg(imageRequest.getSrcImg())
-                .altImg(imageRequest.getAltImg())
-                .article(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()))
-                .build();
     }
 }
