@@ -9,7 +9,8 @@ import pl.strefainformacji.entity.Article;
 public class ArticleMapper {
 
     public static ArticleResponse toArticleResponse(Article article) {
-        return new ArticleResponse(article.getArticleId(),
+        return new ArticleResponse(
+                article.getArticleId(),
                 article.getTitle(),
                 article.getShortDescription(),
                 article.getDescription(),
