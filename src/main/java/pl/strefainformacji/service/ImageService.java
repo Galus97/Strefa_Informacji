@@ -26,7 +26,7 @@ public class ImageService {
 
     public ImageResponse getImage(Long imageId) {
         serviceValidator.throwIfIdIsNotValid(imageId, ErrorMessages.INVALID_IMAGE_ID);
-        return ImageResponse.fromEntity(getImageOrThrowIfNotExist(imageId));
+        return ImageMapper.toImageResponse(getImageOrThrowIfNotExist(imageId));
     }
 
     public ImageResponse saveImage(ImageRequest imageRequest) {
@@ -35,7 +35,7 @@ public class ImageService {
         Image image = ImageMapper.toImageModel(imageRequest);
         image.setArticle(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()));
 
-        return ImageResponse.fromEntity(imageRepository.save(image));
+        return ImageMapper.toImageResponse(imageRepository.save(image));
     }
 
     public ImageResponse updateImage(ImageRequest imageRequest) {
@@ -47,7 +47,7 @@ public class ImageService {
         existingImage.setAltImg(imageRequest.getAltImg());
         existingImage.setArticle(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()));
 
-        return ImageResponse.fromEntity(imageRepository.save(existingImage));
+        return ImageMapper.toImageResponse(imageRepository.save(existingImage));
     }
 
     public void deleteImage(Long imageId) {
@@ -57,7 +57,10 @@ public class ImageService {
 
     public List<ImageResponse> getAllImagesByArticle(Long articleId) {
         Article article = articleService.getArticleOrThrowIfNotExist(articleId);
-        return ImageResponse.fromEntityList(imageRepository.findAllByArticle(article));
+        return imageRepository.findAllByArticle(article)
+                .stream()
+                .map(ImageMapper::toImageResponse)
+                .toList();
     }
 
     private Image getImageOrThrowIfNotExist(Long imageId) {
