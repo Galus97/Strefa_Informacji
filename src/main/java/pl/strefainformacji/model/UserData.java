@@ -1,4 +1,4 @@
-package pl.strefainformacji.entity;
+package pl.strefainformacji.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

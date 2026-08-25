@@ -1,13 +1,15 @@
-package pl.strefainformacji.entity;
+package pl.strefainformacji.model;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,31 +26,22 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "users")
-public class User {
+@Table(name = "images")
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @EqualsAndHashCode.Include
+    private Long imageId;
 
-    @Size(min = 3)
-    private String firstName;
+    @NotBlank
+    private String srcImg;
 
-    @Size(min = 3)
-    private String lastName;
+    @NotBlank
+    private String altImg;
 
-    @Size(min = 5)
-    @Column(unique = true)
-    @Email
-    private String email;
-
-    @Size(min = 5)
-    private String password;
-
-    private boolean isSubscriber;
-
-    private boolean enabled;
-
-    private String emailCode;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id", nullable = false)
+    @JsonIgnore
+    private Article article;
 }

@@ -3,7 +3,7 @@ package pl.strefainformacji.mapper;
 import org.springframework.stereotype.Component;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
-import pl.strefainformacji.entity.Article;
+import pl.strefainformacji.model.Article;
 
 @Component
 public class ArticleMapper {

@@ -1,6 +1,6 @@
 package pl.strefainformacji.dto.response;
 
-import pl.strefainformacji.entity.UserData;
+import pl.strefainformacji.model.UserData;
 
 public record UserDataResponse (
         Long UserDataId,

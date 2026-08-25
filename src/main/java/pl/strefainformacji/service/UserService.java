@@ -10,7 +10,7 @@ import pl.strefainformacji.mapper.UserMapper;
 import pl.strefainformacji.util.RegisterValidator;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
-import pl.strefainformacji.entity.User;
+import pl.strefainformacji.model.User;
 import pl.strefainformacji.exception.UserNotFoundException;
 import pl.strefainformacji.exception.ValidationException;
 import pl.strefainformacji.repository.UserRepository;

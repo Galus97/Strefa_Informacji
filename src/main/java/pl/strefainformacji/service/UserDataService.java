@@ -7,7 +7,7 @@ import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
-import pl.strefainformacji.entity.UserData;
+import pl.strefainformacji.model.UserData;
 import pl.strefainformacji.exception.UserDataNotFoundException;
 import pl.strefainformacji.repository.UserDataRepository;
 import pl.strefainformacji.util.ServiceValidator;

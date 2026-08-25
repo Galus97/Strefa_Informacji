@@ -3,7 +3,7 @@ package pl.strefainformacji.mapper;
 import org.springframework.stereotype.Component;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
-import pl.strefainformacji.entity.User;
+import pl.strefainformacji.model.User;
 
 @Component
 public class UserMapper {

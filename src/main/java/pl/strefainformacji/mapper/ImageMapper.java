@@ -3,7 +3,7 @@ package pl.strefainformacji.mapper;
 import org.springframework.stereotype.Component;
 import pl.strefainformacji.dto.request.ImageRequest;
 import pl.strefainformacji.dto.response.ImageResponse;
-import pl.strefainformacji.entity.Image;
+import pl.strefainformacji.model.Image;
 
 @Component
 public class ImageMapper {
