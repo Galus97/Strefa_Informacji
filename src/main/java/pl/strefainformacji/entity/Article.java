@@ -8,14 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 
@@ -23,24 +19,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
+@SQLDelete(sql = "UPDATE articles SET is_deleted = true WHERE article_id=?")
+@SQLRestriction("is_deleted=false")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "articles")
 public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "article_id")
     private Long articleId;
 
     @Size(min = 3)
     private String title;
 
     @Size(min = 10)
+    @Column(name = "short_description")
     private String shortDescription;
 
     @Size(min = 10)
@@ -56,4 +53,7 @@ public class Article {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false, name = "is_deleted")
+    private boolean isDeleted = false;
 }
