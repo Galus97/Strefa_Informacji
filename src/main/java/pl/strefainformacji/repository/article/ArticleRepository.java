@@ -1,16 +1,17 @@
-package pl.strefainformacji.repository;
+package pl.strefainformacji.repository.article;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.strefainformacji.component.Category;
-import pl.strefainformacji.entity.Article;
+import pl.strefainformacji.model.Article;
 import pl.strefainformacji.component.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
 
     List<Article> findAllArticlesByCategories(List<Category> categories);
 

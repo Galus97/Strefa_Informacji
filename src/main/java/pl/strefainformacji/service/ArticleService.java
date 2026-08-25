@@ -15,10 +15,10 @@ import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
-import pl.strefainformacji.entity.Article;
+import pl.strefainformacji.model.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.mapper.ArticleMapper;
-import pl.strefainformacji.repository.ArticleRepository;
+import pl.strefainformacji.repository.article.ArticleRepository;
 import pl.strefainformacji.util.ServiceValidator;
 
 @Service

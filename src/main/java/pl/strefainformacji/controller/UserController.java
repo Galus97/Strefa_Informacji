@@ -1,5 +1,6 @@
 package pl.strefainformacji.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> saveUser(@RequestBody @Valid UserRequest userRequest) {
         try {
             UserResponse savedUser = userService.saveNewUser(userRequest);
             return ResponseEntity.created(URI.create("/user/" + savedUser.userId()))
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUser(@RequestBody @Valid UserRequest userRequest) {
         return ResponseEntity.ok(userService.updateUser(userRequest));
     }
 
