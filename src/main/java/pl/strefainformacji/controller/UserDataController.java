@@ -1,5 +1,6 @@
 package pl.strefainformacji.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,14 @@ public class UserDataController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDataResponse> saveUserData(@RequestBody UserDataRequest userDataRequest) {
+    public ResponseEntity<UserDataResponse> saveUserData(@RequestBody @Valid UserDataRequest userDataRequest) {
         UserDataResponse savedUserData = userDataService.saveUserData(userDataRequest);
-        return ResponseEntity.created(URI.create("/userdata/" + savedUserData.UserDataId()))
+        return ResponseEntity.created(URI.create("/userdata/" + savedUserData.userDataId()))
                 .body(savedUserData);
     }
 
     @PutMapping
-    public ResponseEntity<UserDataResponse> updateUserData(@RequestBody UserDataRequest userDataRequest) {
+    public ResponseEntity<UserDataResponse> updateUserData(@RequestBody @Valid UserDataRequest userDataRequest) {
         return ResponseEntity.ok(userDataService.updateUserData(userDataRequest));
     }
 

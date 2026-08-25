@@ -1,8 +1,8 @@
 package pl.strefainformacji.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.strefainformacji.entity.Article;
-import pl.strefainformacji.entity.Image;
+import pl.strefainformacji.model.Article;
+import pl.strefainformacji.model.Image;
 
 import java.util.List;
 

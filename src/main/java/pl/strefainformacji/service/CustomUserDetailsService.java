@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.strefainformacji.component.CurrentUser;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
-import pl.strefainformacji.entity.User;
+import pl.strefainformacji.model.User;
 import pl.strefainformacji.repository.UserRepository;
 import pl.strefainformacji.util.ServiceValidator;
 

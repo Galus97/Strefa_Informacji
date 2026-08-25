@@ -1,5 +1,6 @@
 package pl.strefainformacji.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,14 @@ public class ImageController {
     }
 
     @PostMapping
-    public ResponseEntity<ImageResponse> saveImage(@RequestBody ImageRequest imageRequest) {
+    public ResponseEntity<ImageResponse> saveImage(@RequestBody @Valid ImageRequest imageRequest) {
         ImageResponse savedImage = imageService.saveImage(imageRequest);
         return ResponseEntity.created(URI.create("/image/" + savedImage.imageId()))
                 .body(savedImage);
     }
 
     @PutMapping
-    public ResponseEntity<ImageResponse> updateImage(@RequestBody ImageRequest imageRequest) {
+    public ResponseEntity<ImageResponse> updateImage(@RequestBody @Valid ImageRequest imageRequest) {
         return ResponseEntity.ok(imageService.updateImage(imageRequest));
     }
 
