@@ -15,6 +15,10 @@ public class ArticleSpecificationProviderManager implements SpecificationProvide
 
     @Override
     public SpecificationProvider<Article> getSpecification(String key) {
-        return null;
+        return articleSpecificationProviders.stream()
+                .filter(p -> p.getKey().equals(key))
+                .findFirst()
+                .orElseThrow(() ->
+                        new RuntimeException("Can't find correct specification provider for key " + key));
     }
 }
