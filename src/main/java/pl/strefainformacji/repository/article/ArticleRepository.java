@@ -1,5 +1,6 @@
 package pl.strefainformacji.repository.article;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -13,14 +14,15 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
 
-    List<Article> findAllArticlesByCategories(List<Category> categories);
+    List<Article> findAllArticlesByCategories(List<Category> categories, Pageable pageable);
 
     List<Article> findArticlesByTags(List<Tag> tags);
 
     @Query("SELECT a FROM Article a WHERE a.createdAt BETWEEN :from AND :to")
     List<Article> findAllByCreatedAtBetween(
             @Param("from")LocalDateTime from,
-            @Param("to") LocalDateTime to);
+            @Param("to") LocalDateTime to,
+            Pageable pageable);
 
-    Article findByTitleContainingIgnoreCase(String title);
+    Article findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
