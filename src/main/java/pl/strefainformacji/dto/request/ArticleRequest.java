@@ -7,7 +7,6 @@ import lombok.Data;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -24,5 +23,4 @@ public class ArticleRequest {
     private List<Category> categories;
     @NotNull
     private List<Tag> tags;
-    private LocalDateTime createdAt;
 }
