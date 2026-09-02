@@ -9,6 +9,7 @@ import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
+import pl.strefainformacji.dto.search_param.ArticleSearchParameters;
 import pl.strefainformacji.service.ArticleService;
 
 import java.net.URI;
@@ -72,7 +73,11 @@ public class ArticleController {
     public ResponseEntity<ArticleResponse> getArticleByTitle(
             @RequestParam String title,
             Pageable pageable) {
-
         return ResponseEntity.ok(articleService.getArticleByTitle(title, pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ArticleResponse>> searchParameters(ArticleSearchParameters articleSearchParameters) {
+        return ResponseEntity.ok(articleService.search(articleSearchParameters));
     }
 }
