@@ -24,7 +24,7 @@ public class UserDataController {
     @PostMapping
     public ResponseEntity<UserDataResponse> saveUserData(@RequestBody @Valid UserDataRequest userDataRequest) {
         UserDataResponse savedUserData = userDataService.saveUserData(userDataRequest);
-        return ResponseEntity.created(URI.create("/userdata/" + savedUserData.userDataId()))
+        return ResponseEntity.created(URI.create("/userdata"))
                 .body(savedUserData);
     }
 

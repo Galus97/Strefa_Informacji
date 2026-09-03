@@ -7,6 +7,7 @@ import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
+import pl.strefainformacji.mapper.UserDataMapper;
 import pl.strefainformacji.model.UserData;
 import pl.strefainformacji.exception.UserDataNotFoundException;
 import pl.strefainformacji.repository.UserDataRepository;
@@ -23,7 +24,7 @@ public class UserDataService {
     @Transactional(readOnly = true)
     public UserDataResponse getUserData(Long userDataId) {
         serviceValidator.throwIfIdIsNotValid(userDataId, ErrorMessages.INVALID_USER_DATA_ID);
-        return UserDataResponse.fromEntity(getUserDataOrThrowIfNotExist(userDataId)); 
+        return UserDataMapper.toUserDataResponse(getUserDataOrThrowIfNotExist(userDataId));
     }
 
     @Transactional(readOnly = true)
@@ -32,13 +33,14 @@ public class UserDataService {
         UserData userData = userDataRepository.findByUser(userService.getUserOrThrowIfNotExist(userId))
                 .orElseThrow(() -> new UserDataNotFoundException(ErrorMessages.USER_DATA_NOT_FOUND_BY_USER));
 
-        return UserDataResponse.fromEntity(userData);
+        return UserDataMapper.toUserDataResponse(userData);
     }
 
     @Transactional
     public UserDataResponse saveUserData(UserDataRequest userDataRequest) {
         serviceValidator.throwIfRequestIsNull(userDataRequest, ErrorMessages.USER_DATA_REQUEST_IS_NULL);
-        return UserDataResponse.fromEntity(userDataRepository.save(buildUserDataFromRequest(userDataRequest)));
+        return UserDataMapper.toUserDataResponse(
+                userDataRepository.save(UserDataMapper.toUserDataModel(userDataRequest)));
     }
 
     @Transactional
@@ -55,7 +57,7 @@ public class UserDataService {
         existingUserData.setPhoneNumber(userDataRequest.getPhoneNumber());
         existingUserData.setUser(userService.getUserOrThrowIfNotExist(userDataRequest.getUserDataId()));
 
-        return UserDataResponse.fromEntity(userDataRepository.save(existingUserData));
+        return UserDataMapper.toUserDataResponse(userDataRepository.save(existingUserData));
     }
 
     @Transactional
@@ -69,16 +71,4 @@ public class UserDataService {
         return userDataRepository.findById(id).orElseThrow(
             () -> new UserDataNotFoundException(messageService.getMessage(ErrorMessages.USER_DATA_NOT_FOUND)));
     }
-
-    private UserData buildUserDataFromRequest(UserDataRequest userDataRequest) {
-        return UserData.builder()
-            .city(userDataRequest.getCity())
-            .street(userDataRequest.getStreet())
-            .streetNumber(userDataRequest.getStreetNumber())
-            .apartmentNumber(userDataRequest.getApartmentNumber())
-            .zipCode(userDataRequest.getZipCode())
-            .phoneNumber(userDataRequest.getPhoneNumber())
-            .user(userService.getUserOrThrowIfNotExist(userDataRequest.getUserId()))
-            .build();
-        }
 }

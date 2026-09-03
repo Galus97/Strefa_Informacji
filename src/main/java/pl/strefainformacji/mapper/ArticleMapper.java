@@ -26,7 +26,6 @@ public class ArticleMapper {
                 .description(articleRequest.getDescription())
                 .categories(articleRequest.getCategories())
                 .tags(articleRequest.getTags())
-                .createdAt(articleRequest.getCreatedAt())
                 .build();
     }
 }

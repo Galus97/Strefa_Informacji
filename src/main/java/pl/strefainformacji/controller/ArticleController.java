@@ -2,12 +2,14 @@ package pl.strefainformacji.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
+import pl.strefainformacji.dto.search_param.ArticleSearchParameters;
 import pl.strefainformacji.service.ArticleService;
 
 import java.net.URI;
@@ -43,8 +45,11 @@ public class ArticleController {
     }
 
     @GetMapping("/by-categories")
-    public ResponseEntity<List<ArticleResponse>> getArticlesByCategories(@RequestParam List<Category> categories) {
-        return ResponseEntity.ok(articleService.getArticlesByCategory(categories));
+    public ResponseEntity<List<ArticleResponse>> getArticlesByCategories(
+            @RequestParam List<Category> categories,
+            Pageable pageable) {
+
+        return ResponseEntity.ok(articleService.getArticlesByCategory(categories, pageable));
     }
 
     @GetMapping("/by-tags")
@@ -55,15 +60,24 @@ public class ArticleController {
     @GetMapping("/all/by-time")
     public ResponseEntity<List<ArticleResponse>> getArticlesByDates(
             @RequestParam(required = false) String from,
-            @RequestParam(required = false) String to) {
+            @RequestParam(required = false) String to,
+            Pageable pageable) {
+
         if (from != null && to != null) {
-            return ResponseEntity.ok(articleService.getArticlesCreatedAtBetween(from, to));
+            return ResponseEntity.ok(articleService.getArticlesCreatedAtBetween(from, to, pageable));
         }
-        return ResponseEntity.ok(articleService.getAllArticles());
+        return ResponseEntity.ok(articleService.getAllArticles(pageable));
     }
 
     @GetMapping("/by-title")
-    public ResponseEntity<ArticleResponse> getArticleByTitle(@RequestParam String title) {
-        return ResponseEntity.ok(articleService.getArticleByTitle(title));
+    public ResponseEntity<ArticleResponse> getArticleByTitle(
+            @RequestParam String title,
+            Pageable pageable) {
+        return ResponseEntity.ok(articleService.getArticleByTitle(title, pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ArticleResponse>> searchParameters(ArticleSearchParameters articleSearchParameters) {
+        return ResponseEntity.ok(articleService.search(articleSearchParameters));
     }
 }

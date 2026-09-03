@@ -5,6 +5,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,12 @@ import pl.strefainformacji.component.MessageService;
 import pl.strefainformacji.component.Tag;
 import pl.strefainformacji.dto.request.ArticleRequest;
 import pl.strefainformacji.dto.response.ArticleResponse;
+import pl.strefainformacji.dto.search_param.ArticleSearchParameters;
 import pl.strefainformacji.model.Article;
 import pl.strefainformacji.exception.ArticleNotFoundException;
 import pl.strefainformacji.mapper.ArticleMapper;
 import pl.strefainformacji.repository.article.ArticleRepository;
+import pl.strefainformacji.repository.article.ArticleSpecificationBuilder;
 import pl.strefainformacji.util.ServiceValidator;
 
 @Service
@@ -27,6 +31,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MessageService messageService;
     private final ServiceValidator serviceValidator;
+    private final ArticleSpecificationBuilder articleSpecificationBuilder;
 
     @Transactional(readOnly = true)
     public ArticleResponse getArticleResponse(Long articleId) {
@@ -37,7 +42,8 @@ public class ArticleService {
     @Transactional
     public ArticleResponse saveArticle(ArticleRequest articleRequest) {
         serviceValidator.throwIfRequestIsNull(articleRequest, ErrorMessages.ARTICLE_REQUEST_IS_NULL);
-        return ArticleMapper.toArticleResponse(ArticleMapper.toArticleModel(articleRequest));
+        Article article = articleRepository.save(ArticleMapper.toArticleModel(articleRequest));
+        return ArticleMapper.toArticleResponse(article);
     }
 
     @Transactional
@@ -60,18 +66,16 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getAllArticles() {
-        List<ArticleResponse>  articleResponses = new ArrayList<>();
-
-        List<Article> articles = articleRepository.findAll();
-        articles.forEach(article -> articleResponses.add(ArticleMapper.toArticleResponse(article)));
-
-        return articleResponses;
+    public List<ArticleResponse> getAllArticles(Pageable pageable) {
+         return articleRepository.findAll(pageable)
+                 .stream()
+                 .map(ArticleMapper::toArticleResponse)
+                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getArticlesByCategory(List<Category> categories) {
-        return articleRepository.findAllArticlesByCategories(categories)
+    public List<ArticleResponse> getArticlesByCategory(List<Category> categories, Pageable pageable) {
+        return articleRepository.findAllArticlesByCategories(categories, pageable)
                 .stream()
                 .map(ArticleMapper::toArticleResponse)
                 .toList();
@@ -86,7 +90,7 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getArticlesCreatedAtBetween(String from, String to) {
+    public List<ArticleResponse> getArticlesCreatedAtBetween(String from, String to, Pageable pageable) {
         if (from == null || to == null) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_PARAMS);
         }
@@ -95,22 +99,31 @@ public class ArticleService {
             LocalDateTime fromDate = LocalDateTime.parse(from);
             LocalDateTime toDate = LocalDateTime.parse(to);
 
-            return articleRepository.findAllByCreatedAtBetween(fromDate, toDate)
+            return articleRepository.findAllByCreatedAtBetween(fromDate, toDate, pageable)
                     .stream()
                     .map(ArticleMapper::toArticleResponse)
                     .toList();
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_FORMAT_PARAMS);
         }
-
     }
 
     @Transactional(readOnly = true)
-    public ArticleResponse getArticleByTitle(String title) {
+    public ArticleResponse getArticleByTitle(String title, Pageable pageable) {
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException(ErrorMessages.INVALID_PARAM);
         }
-        return ArticleMapper.toArticleResponse(articleRepository.findByTitleContainingIgnoreCase(title));
+        return ArticleMapper.toArticleResponse(articleRepository.findByTitleContainingIgnoreCase(title, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ArticleResponse> search(ArticleSearchParameters articleSearchParameters) {
+        Specification<Article> articleSpecification = articleSpecificationBuilder.build(articleSearchParameters);
+
+        return articleRepository.findAll(articleSpecification)
+                .stream()
+                .map(ArticleMapper::toArticleResponse)
+                .toList();
     }
 
     // Used in other classes
