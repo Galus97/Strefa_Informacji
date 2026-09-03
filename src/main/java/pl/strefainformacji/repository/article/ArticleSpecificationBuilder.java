@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 import pl.strefainformacji.dto.search_param.ArticleSearchParameters;
 import pl.strefainformacji.model.Article;
 import pl.strefainformacji.repository.specification.SpecificationBuilder;
-import pl.strefainformacji.repository.specification.SpecificationProvider;
 import pl.strefainformacji.repository.specification.SpecificationProviderManager;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
