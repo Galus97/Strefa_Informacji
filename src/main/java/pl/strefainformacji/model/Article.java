@@ -1,17 +1,12 @@
 package pl.strefainformacji.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.validator.constraints.Length;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 
@@ -33,21 +28,23 @@ public class Article {
     @Column(name = "article_id")
     private Long articleId;
 
-    @Size(min = 3)
+    @Length(min = 3)
     private String title;
 
-    @Size(min = 10)
+    @Length(min = 10)
     @Column(name = "short_description")
     private String shortDescription;
 
-    @Size(min = 10)
+    @Length(min = 10)
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private List<Category> categories;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private List<Tag> tags;
 
     @CreationTimestamp
