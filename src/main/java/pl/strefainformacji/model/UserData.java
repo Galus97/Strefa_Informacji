@@ -1,15 +1,13 @@
 package pl.strefainformacji.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Data
@@ -23,10 +21,10 @@ public class UserData {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long userDataId;
 
-    @Size(min = 3)
+    @Length(min = 3)
     private String city;
 
-    @Size(min = 3)
+    @Length(min = 3)
     private String street;
 
     @NotNull
@@ -42,5 +40,6 @@ public class UserData {
     private Integer phoneNumber;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }
