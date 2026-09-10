@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import pl.strefainformacji.component.Category;
 import pl.strefainformacji.component.Tag;
 
@@ -13,11 +14,11 @@ import java.util.List;
 @Data
 public class ArticleRequest {
     private Long articleId;
-    @Size(min = 3)
+    @Length(min = 3)
     private String title;
-    @Size(min = 10)
+    @Length(min = 10)
     private String shortDescription;
-    @Size(min = 10)
+    @Length(min = 10)
     private String description;
     @NotNull
     private List<Category> categories;

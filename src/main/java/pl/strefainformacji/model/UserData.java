@@ -7,18 +7,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Data
+@Builder
+@SQLDelete(sql = "UPDATE usersData SET is_deleted = true WHERE user_data_id = ?")
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "usersData")
 public class UserData {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "user_data_id")
     private Long userDataId;
 
     @Length(min = 3)
@@ -42,4 +47,7 @@ public class UserData {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(nullable = false, name = "is_deleted") // add this
+    private boolean isDeleted = false;
 }
