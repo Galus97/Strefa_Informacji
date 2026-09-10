@@ -16,7 +16,7 @@ public class TagSpecificationProvider implements SpecificationProvider<Article> 
     }
 
     @Override
-    public Specification getSpecification(String[] params) {
+    public Specification<Article> getSpecification(String[] params) {
         return (root, query, criteriaBuilder) -> {
             if (params == null || params.length == 0) {
                return null;
