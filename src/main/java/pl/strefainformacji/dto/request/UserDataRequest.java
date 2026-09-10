@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 @Builder
 @Data
 public class UserDataRequest {
     private Long userDataId;
-    @Size(min = 3)
+    @Length(min = 3)
     private String city;
-    @Size(min = 3)
+    @Length(min = 3)
     private String street;
     @NotNull
     private Integer streetNumber;
