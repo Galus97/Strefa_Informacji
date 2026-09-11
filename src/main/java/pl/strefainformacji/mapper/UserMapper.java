@@ -1,6 +1,7 @@
 package pl.strefainformacji.mapper;
 
 import org.springframework.stereotype.Component;
+import pl.strefainformacji.dto.request.UserRegisterRequest;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.model.User;
@@ -19,13 +20,14 @@ public class UserMapper {
         );
     }
 
-    public static User toUserModel(UserRequest userRequest) {
+    public static User toUserModel(UserRegisterRequest userRequest) {
         return User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .email(userRequest.getEmail())
                 .password(userRequest.getPassword())
-                .isSubscriber(userRequest.isSubscriber())
+                .isSubscriber(false)
+                .enabled(false)
                 .build();
     }
 }
