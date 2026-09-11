@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.strefainformacji.component.ErrorMessages;
 import pl.strefainformacji.component.MessageService;
+import pl.strefainformacji.dto.request.UserRegisterRequest;
 import pl.strefainformacji.mapper.UserMapper;
 import pl.strefainformacji.util.RegisterValidator;
 import pl.strefainformacji.dto.request.UserRequest;
@@ -34,7 +35,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse saveNewUser(UserRequest userRequest) throws ValidationException {
+    public UserResponse saveNewUser(UserRegisterRequest userRequest) throws ValidationException {
         serviceValidator.throwIfRequestIsNull(userRequest, ErrorMessages.USER_REQUEST_IS_NULL);
         User user = UserMapper.toUserModel(userRequest);
 
