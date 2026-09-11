@@ -1,7 +1,11 @@
 package pl.strefainformacji.dto.request;
 
+import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
+@Getter
+@Builder
 public class UserRegisterRequest {
 
     @Length(min = 3)
