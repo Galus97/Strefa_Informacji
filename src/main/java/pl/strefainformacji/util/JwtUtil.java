@@ -42,6 +42,9 @@ public class JwtUtil {
         return claimsJws.getPayload().getExpiration().before(new Date());
     }
 
+    public String getUserName(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = Jwts.parser()
