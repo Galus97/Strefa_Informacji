@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.strefainformacji.dto.request.UserLoginRequest;
 import pl.strefainformacji.dto.request.UserRegisterRequest;
+import pl.strefainformacji.dto.response.UserLoginResponse;
 import pl.strefainformacji.dto.response.UserResponse;
 import pl.strefainformacji.exception.ValidationException;
+import pl.strefainformacji.service.AuthenticationService;
 import pl.strefainformacji.service.UserService;
 
 import java.net.URI;
@@ -19,6 +22,7 @@ import java.net.URI;
 @RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserRegisterRequest request) {
@@ -29,5 +33,10 @@ public class AuthController {
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getValidationsErrors());
         }
+    }
+
+    @PostMapping("/login")
+    public UserLoginResponse login(@RequestBody @Valid UserLoginRequest request) {
+        return authenticationService.authenticate(request);
     }
 }
