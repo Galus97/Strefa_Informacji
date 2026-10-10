@@ -3,9 +3,11 @@ package pl.strefainformacji.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
+import pl.strefainformacji.model.User;
 import pl.strefainformacji.service.UserDataService;
 
 import java.net.URI;
@@ -16,31 +18,31 @@ import java.net.URI;
 public class UserDataController {
     private final UserDataService userDataService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDataResponse> showUserData(@PathVariable Long id) {
-        return ResponseEntity.ok(userDataService.getUserData(id));
+    @GetMapping
+    public ResponseEntity<UserDataResponse> getUserDataByUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userDataService.getUserDataByUser(user));
     }
 
     @PostMapping
-    public ResponseEntity<UserDataResponse> saveUserData(@RequestBody @Valid UserDataRequest userDataRequest) {
-        UserDataResponse savedUserData = userDataService.saveUserData(userDataRequest);
+    public ResponseEntity<UserDataResponse> saveUserData(
+            @RequestBody @Valid UserDataRequest userDataRequest,
+            @AuthenticationPrincipal User user) {
+        UserDataResponse savedUserData = userDataService.saveUserData(userDataRequest, user);
+
         return ResponseEntity.created(URI.create("/userdata"))
                 .body(savedUserData);
     }
 
     @PutMapping
-    public ResponseEntity<UserDataResponse> updateUserData(@RequestBody @Valid UserDataRequest userDataRequest) {
-        return ResponseEntity.ok(userDataService.updateUserData(userDataRequest));
+    public ResponseEntity<UserDataResponse> updateUserData(
+            @RequestBody @Valid UserDataRequest userDataRequest,
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userDataService.updateUserData(userDataRequest, user));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteUserData(@PathVariable Long id) {
-        userDataService.deleteUserData(id);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUserData(@AuthenticationPrincipal User user) {
+        userDataService.deleteUserData(user);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<UserDataResponse> getUserDataByUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userDataService.getUserDataByUser(id));
     }
 }

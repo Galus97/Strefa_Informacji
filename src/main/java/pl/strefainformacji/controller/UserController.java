@@ -3,20 +3,17 @@ package pl.strefainformacji.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.strefainformacji.dto.request.UserRequest;
 import pl.strefainformacji.dto.response.UserResponse;
-import pl.strefainformacji.exception.ValidationException;
+import pl.strefainformacji.model.User;
 import pl.strefainformacji.service.UserService;
-
-import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,19 +21,21 @@ import java.net.URI;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> showUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserResponse(id));
+    @GetMapping
+    public ResponseEntity<UserResponse> showUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getUserResponse(user));
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody @Valid UserRequest userRequest) {
-        return ResponseEntity.ok(userService.updateUser(userRequest));
+    public ResponseEntity<UserResponse> updateUser(
+            @RequestBody @Valid UserRequest userRequest,
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.updateUser(userRequest, user));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user);
         return ResponseEntity.noContent().build();
     }
 }
