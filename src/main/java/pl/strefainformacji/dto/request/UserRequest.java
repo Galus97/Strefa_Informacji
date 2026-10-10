@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @Data
 public class UserRequest {
-    private Long userId;
     @Length(min = 3)
     private String firstName;
     @Length(min = 3)
