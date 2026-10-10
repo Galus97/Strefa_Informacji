@@ -29,9 +29,9 @@ public class UserService {
     private final ServiceValidator serviceValidator;
 
     @Transactional(readOnly = true)
-    public UserResponse getUserResponse(Long userId){
-        serviceValidator.throwIfIdIsNotValid(userId, ErrorMessages.INVALID_USER_ID);
-        return UserMapper.toUserResponse(getUserOrThrowIfNotExist(userId));
+    public UserResponse getUserResponse(User user){
+        serviceValidator.throwIfIdIsNotValid(user.getUserId(), ErrorMessages.INVALID_USER_ID);
+        return UserMapper.toUserResponse(user);
     }
 
     @Transactional
@@ -50,17 +50,16 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId){
-        serviceValidator.throwIfIdIsNotValid(userId, ErrorMessages.INVALID_USER_ID);
-        userRepository.delete(getUserOrThrowIfNotExist(userId));
+    public void deleteUser(User user){
+        serviceValidator.throwIfIdIsNotValid(user.getUserId(), ErrorMessages.INVALID_USER_ID);
+        userRepository.delete(user);
     }
 
     @Transactional
-    public UserResponse updateUser(UserRequest userRequest){
+    public UserResponse updateUser(UserRequest userRequest, User user){
         serviceValidator.throwIfRequestIsNull(userRequest, ErrorMessages.USER_REQUEST_IS_NULL);
-        serviceValidator.throwIfIdIsNotValid(userRequest.getUserId(), ErrorMessages.INVALID_USER_ID);
 
-        User existingUser = getUserOrThrowIfNotExist(userRequest.getUserId());
+        User existingUser = getUserOrThrowIfNotExist(user.getUserId());
         existingUser.setFirstName(userRequest.getFirstName());
         existingUser.setLastName(userRequest.getLastName());
         existingUser.setEmail(userRequest.getEmail());
@@ -69,7 +68,6 @@ public class UserService {
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
         return UserMapper.toUserResponse(userRepository.save(existingUser));
-
     }
 
     //Used in others classes
