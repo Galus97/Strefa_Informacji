@@ -2,6 +2,7 @@ package pl.strefainformacji.mapper;
 
 import pl.strefainformacji.dto.request.UserDataRequest;
 import pl.strefainformacji.dto.response.UserDataResponse;
+import pl.strefainformacji.model.User;
 import pl.strefainformacji.model.UserData;
 
 public class UserDataMapper {
@@ -16,7 +17,7 @@ public class UserDataMapper {
         );
     }
 
-    public static UserData toUserDataModel(UserDataRequest userDataRequest) {
+    public static UserData toUserDataModel(UserDataRequest userDataRequest, User user) {
         return UserData.builder()
                 .userDataId(userDataRequest.getUserDataId())
                 .city(userDataRequest.getCity())
@@ -25,6 +26,7 @@ public class UserDataMapper {
                 .apartmentNumber(userDataRequest.getApartmentNumber())
                 .zipCode(userDataRequest.getZipCode())
                 .phoneNumber(userDataRequest.getPhoneNumber())
+                .user(user)
                 .build();
     }
 }
