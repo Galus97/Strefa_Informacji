@@ -19,7 +19,6 @@ public class UserDataMapper {
 
     public static UserData toUserDataModel(UserDataRequest userDataRequest, User user) {
         return UserData.builder()
-                .userDataId(userDataRequest.getUserDataId())
                 .city(userDataRequest.getCity())
                 .street(userDataRequest.getStreet())
                 .streetNumber(userDataRequest.getStreetNumber())
