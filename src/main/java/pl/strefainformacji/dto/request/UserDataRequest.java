@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @Data
 public class UserDataRequest {
-    private Long userDataId;
     @Length(min = 3)
     private String city;
     @Length(min = 3)
