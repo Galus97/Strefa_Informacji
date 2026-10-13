@@ -26,7 +26,7 @@ public class ImageService {
 
     public ImageResponse getImage(Long imageId) {
         serviceValidator.throwIfIdIsNotValid(imageId, ErrorMessages.INVALID_IMAGE_ID);
-        return ImageMapper.toImageResponse(getImageOrThrowIfNotExist(imageId));
+        return ImageMapper.toImageResponse(getImageOrThrow(imageId));
     }
 
     public ImageResponse saveImage(ImageRequest imageRequest) {
@@ -42,7 +42,7 @@ public class ImageService {
         serviceValidator.throwIfRequestIsNull(imageRequest, ErrorMessages.IMAGE_REQUEST_IS_NULL);
         serviceValidator.throwIfIdIsNotValid(imageRequest.getImageId(), ErrorMessages.INVALID_IMAGE_ID);
 
-        Image existingImage = getImageOrThrowIfNotExist(imageRequest.getImageId());
+        Image existingImage = getImageOrThrow(imageRequest.getImageId());
         existingImage.setSrcImg(imageRequest.getSrcImg());
         existingImage.setAltImg(imageRequest.getAltImg());
         existingImage.setArticle(articleService.getArticleOrThrowIfNotExist(imageRequest.getArticleId()));
@@ -52,7 +52,7 @@ public class ImageService {
 
     public void deleteImage(Long imageId) {
         serviceValidator.throwIfIdIsNotValid(imageId, ErrorMessages.INVALID_IMAGE_ID);
-        imageRepository.delete(getImageOrThrowIfNotExist(imageId));
+        imageRepository.delete(getImageOrThrow(imageId));
     }
 
     public List<ImageResponse> getAllImagesByArticle(Long articleId) {
@@ -63,7 +63,7 @@ public class ImageService {
                 .toList();
     }
 
-    private Image getImageOrThrowIfNotExist(Long imageId) {
+    private Image getImageOrThrow(Long imageId) {
         return imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(
                         messageService.getMessage(ErrorMessages.IMAGE_NOT_FOUND, imageId)));
